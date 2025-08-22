@@ -1,0 +1,1978 @@
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Data Cleaning Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; }
+        h1 { margin-bottom: 6px; }
+        .muted { color: #666; margin-top: 0; }
+        h2 { color: #0d6efd; margin-top: 28px; }
+        table { border-collapse: collapse; margin: 12px 0 28px 0; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 14px; }
+        th { background: #f6f8fa; }
+        code { background: #f6f8fa; padding: 1px 4px; border-radius: 4px; }
+        .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .card { border: 1px solid #eee; padding: 12px 16px; border-radius: 10px; }
+        .small { font-size: 13px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Data Cleaning Project Report</h1>
+    <p class="muted">Covers: Missing data handling, duplicates removal, standardization, outlier detection & cleaned outputs.</p>
+
+    <h2>Dataset 1 — Summary</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Before Cleaning</h3>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rows</th>
+      <th>columns</th>
+      <th>missing_values_total</th>
+      <th>duplicate_rows</th>
+      <th>numeric_columns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>48895</td>
+      <td>16</td>
+      <td>20141</td>
+      <td>0</td>
+      <td>id, host_id, latitude, longitude, price, minimum_nights, number_of_reviews, reviews_per_month, calculated_host_listings_count, availability_365</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        <div class="card">
+            <h3>After Cleaning</h3>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rows</th>
+      <th>columns</th>
+      <th>missing_values_total</th>
+      <th>duplicate_rows</th>
+      <th>numeric_columns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>23268</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>id, host_id, latitude, longitude, price, minimum_nights, number_of_reviews, reviews_per_month, calculated_host_listings_count, availability_365</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </div>
+
+    <h3>Dataset 1 — First 50 Cleaned Rows</h3>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>id</th>
+      <th>name</th>
+      <th>host_id</th>
+      <th>host_name</th>
+      <th>neighbourhood_group</th>
+      <th>neighbourhood</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>room_type</th>
+      <th>price</th>
+      <th>minimum_nights</th>
+      <th>number_of_reviews</th>
+      <th>last_review</th>
+      <th>reviews_per_month</th>
+      <th>calculated_host_listings_count</th>
+      <th>availability_365</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>5295</td>
+      <td>Beautiful 1br on Upper West Side</td>
+      <td>7702</td>
+      <td>Lena</td>
+      <td>Manhattan</td>
+      <td>Upper West Side</td>
+      <td>40.80316</td>
+      <td>-73.96545</td>
+      <td>Entire home/apt</td>
+      <td>135</td>
+      <td>5</td>
+      <td>53</td>
+      <td>2019-06-22</td>
+      <td>0.430000</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>7801</td>
+      <td>Sweet and Spacious Brooklyn Loft</td>
+      <td>21207</td>
+      <td>Chaya</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71842</td>
+      <td>-73.95718</td>
+      <td>Entire home/apt</td>
+      <td>299</td>
+      <td>3</td>
+      <td>9</td>
+      <td>2011-12-28</td>
+      <td>0.070000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>8505</td>
+      <td>Sunny Bedroom Across Prospect Park</td>
+      <td>25326</td>
+      <td>Gregory</td>
+      <td>Brooklyn</td>
+      <td>Windsor Terrace</td>
+      <td>40.65599</td>
+      <td>-73.97519</td>
+      <td>Private room</td>
+      <td>60</td>
+      <td>1</td>
+      <td>19</td>
+      <td>2019-06-23</td>
+      <td>1.370000</td>
+      <td>2</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <td>8700</td>
+      <td>Magnifique Suite au N de Manhattan - vue Cloitres</td>
+      <td>26394</td>
+      <td>Claude &amp; Sophie</td>
+      <td>Manhattan</td>
+      <td>Inwood</td>
+      <td>40.86754</td>
+      <td>-73.92639</td>
+      <td>Private room</td>
+      <td>80</td>
+      <td>4</td>
+      <td>0</td>
+      <td>2019-06-23</td>
+      <td>1.373221</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>13050</td>
+      <td>bright and stylish duplex</td>
+      <td>50846</td>
+      <td>Jennifer</td>
+      <td>Brooklyn</td>
+      <td>Bedford-Stuyvesant</td>
+      <td>40.68554</td>
+      <td>-73.94090</td>
+      <td>Entire home/apt</td>
+      <td>115</td>
+      <td>3</td>
+      <td>11</td>
+      <td>2017-01-01</td>
+      <td>0.100000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>16458</td>
+      <td>Light-filled 2B duplex in the heart of Park Slope!</td>
+      <td>64056</td>
+      <td>Sara</td>
+      <td>Brooklyn</td>
+      <td>Park Slope</td>
+      <td>40.67343</td>
+      <td>-73.98338</td>
+      <td>Entire home/apt</td>
+      <td>225</td>
+      <td>3</td>
+      <td>4</td>
+      <td>2017-09-24</td>
+      <td>0.160000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>17037</td>
+      <td>Lovely EV Artist's Home</td>
+      <td>66035</td>
+      <td>Anna</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72162</td>
+      <td>-73.98008</td>
+      <td>Entire home/apt</td>
+      <td>230</td>
+      <td>9</td>
+      <td>49</td>
+      <td>2018-05-14</td>
+      <td>0.430000</td>
+      <td>1</td>
+      <td>116</td>
+    </tr>
+    <tr>
+      <td>17092</td>
+      <td>Cool Room in Hell's Kitchen</td>
+      <td>66243</td>
+      <td>Enzo</td>
+      <td>Manhattan</td>
+      <td>Hell's Kitchen</td>
+      <td>40.76342</td>
+      <td>-73.98865</td>
+      <td>Private room</td>
+      <td>51</td>
+      <td>7</td>
+      <td>23</td>
+      <td>2019-06-01</td>
+      <td>0.430000</td>
+      <td>1</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <td>19282</td>
+      <td>Sunny, Spacious Top Floor Haven</td>
+      <td>73469</td>
+      <td>Gaia</td>
+      <td>Brooklyn</td>
+      <td>Flatbush</td>
+      <td>40.65401</td>
+      <td>-73.96323</td>
+      <td>Entire home/apt</td>
+      <td>130</td>
+      <td>6</td>
+      <td>16</td>
+      <td>2019-06-15</td>
+      <td>0.150000</td>
+      <td>1</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>20300</td>
+      <td>Great Location for NYC</td>
+      <td>76627</td>
+      <td>Pas</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72912</td>
+      <td>-73.98057</td>
+      <td>Private room</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2016-02-14</td>
+      <td>0.050000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>20853</td>
+      <td>2-bed brownstone duplex + garden</td>
+      <td>79070</td>
+      <td>Tracy</td>
+      <td>Brooklyn</td>
+      <td>Prospect Heights</td>
+      <td>40.68035</td>
+      <td>-73.97162</td>
+      <td>Entire home/apt</td>
+      <td>250</td>
+      <td>7</td>
+      <td>21</td>
+      <td>2019-05-21</td>
+      <td>0.300000</td>
+      <td>1</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <td>26559</td>
+      <td>Beautiful Apartment East Village</td>
+      <td>112793</td>
+      <td>Sally</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72880</td>
+      <td>-73.98192</td>
+      <td>Entire home/apt</td>
+      <td>140</td>
+      <td>7</td>
+      <td>12</td>
+      <td>2017-12-11</td>
+      <td>0.130000</td>
+      <td>1</td>
+      <td>164</td>
+    </tr>
+    <tr>
+      <td>27006</td>
+      <td>Comfortable UWS 2-BD Family-Friendly Brownstone</td>
+      <td>115560</td>
+      <td>Stacy</td>
+      <td>Manhattan</td>
+      <td>Upper West Side</td>
+      <td>40.77823</td>
+      <td>-73.97637</td>
+      <td>Entire home/apt</td>
+      <td>235</td>
+      <td>6</td>
+      <td>27</td>
+      <td>2019-04-27</td>
+      <td>0.270000</td>
+      <td>1</td>
+      <td>199</td>
+    </tr>
+    <tr>
+      <td>27883</td>
+      <td>East Village Sanctuary</td>
+      <td>120223</td>
+      <td>Jen</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72245</td>
+      <td>-73.98527</td>
+      <td>Entire home/apt</td>
+      <td>100</td>
+      <td>4</td>
+      <td>25</td>
+      <td>2011-12-10</td>
+      <td>0.230000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>28907</td>
+      <td>Garden studio in the Upper East Sid</td>
+      <td>124352</td>
+      <td>Lisa</td>
+      <td>Manhattan</td>
+      <td>Upper East Side</td>
+      <td>40.77800</td>
+      <td>-73.94822</td>
+      <td>Entire home/apt</td>
+      <td>150</td>
+      <td>5</td>
+      <td>21</td>
+      <td>2017-08-15</td>
+      <td>0.190000</td>
+      <td>1</td>
+      <td>189</td>
+    </tr>
+    <tr>
+      <td>30927</td>
+      <td>Unique &amp; Charming small 1br Apt. LES</td>
+      <td>120335</td>
+      <td>Cs</td>
+      <td>Manhattan</td>
+      <td>Lower East Side</td>
+      <td>40.71341</td>
+      <td>-73.98856</td>
+      <td>Entire home/apt</td>
+      <td>105</td>
+      <td>3</td>
+      <td>32</td>
+      <td>2019-06-14</td>
+      <td>0.290000</td>
+      <td>1</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td>31902</td>
+      <td>Sanctuary in East Flatbush</td>
+      <td>137292</td>
+      <td>Sunder</td>
+      <td>Brooklyn</td>
+      <td>Flatlands</td>
+      <td>40.63188</td>
+      <td>-73.93248</td>
+      <td>Private room</td>
+      <td>77</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2019-01-01</td>
+      <td>0.020000</td>
+      <td>1</td>
+      <td>178</td>
+    </tr>
+    <tr>
+      <td>32331</td>
+      <td>Sunny, Cobble Hill Apartment</td>
+      <td>139874</td>
+      <td>Sarah</td>
+      <td>Brooklyn</td>
+      <td>Cobble Hill</td>
+      <td>40.68570</td>
+      <td>-73.99183</td>
+      <td>Entire home/apt</td>
+      <td>140</td>
+      <td>2</td>
+      <td>4</td>
+      <td>2016-04-24</td>
+      <td>0.040000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>32969</td>
+      <td>Light filled Williamsburg Apartment</td>
+      <td>142833</td>
+      <td>Katherine</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71596</td>
+      <td>-73.93938</td>
+      <td>Entire home/apt</td>
+      <td>160</td>
+      <td>3</td>
+      <td>11</td>
+      <td>2019-07-02</td>
+      <td>0.110000</td>
+      <td>1</td>
+      <td>188</td>
+    </tr>
+    <tr>
+      <td>36647</td>
+      <td>Private Bdrm/Bathrm. New! Elevator!</td>
+      <td>157798</td>
+      <td>Irene</td>
+      <td>Manhattan</td>
+      <td>East Harlem</td>
+      <td>40.79295</td>
+      <td>-73.93997</td>
+      <td>Private room</td>
+      <td>69</td>
+      <td>2</td>
+      <td>34</td>
+      <td>2017-05-29</td>
+      <td>0.320000</td>
+      <td>1</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>36934</td>
+      <td>Great location in Williamsburg</td>
+      <td>159370</td>
+      <td>Viviana</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71363</td>
+      <td>-73.96398</td>
+      <td>Entire home/apt</td>
+      <td>125</td>
+      <td>6</td>
+      <td>27</td>
+      <td>2018-12-27</td>
+      <td>0.250000</td>
+      <td>1</td>
+      <td>189</td>
+    </tr>
+    <tr>
+      <td>40039</td>
+      <td>Luxurious Condo in DUBMO with View</td>
+      <td>171851</td>
+      <td>Henry</td>
+      <td>Brooklyn</td>
+      <td>DUMBO</td>
+      <td>40.70207</td>
+      <td>-73.98571</td>
+      <td>Private room</td>
+      <td>250</td>
+      <td>3</td>
+      <td>14</td>
+      <td>2011-04-25</td>
+      <td>0.130000</td>
+      <td>1</td>
+      <td>189</td>
+    </tr>
+    <tr>
+      <td>41513</td>
+      <td>Convenient cozy cheap apt Manhattan</td>
+      <td>181167</td>
+      <td>Lorenzo</td>
+      <td>Manhattan</td>
+      <td>Harlem</td>
+      <td>40.82704</td>
+      <td>-73.94907</td>
+      <td>Entire home/apt</td>
+      <td>80</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2015-11-02</td>
+      <td>0.040000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>43957</td>
+      <td>Sunny cozy room in Brklyn townhouse</td>
+      <td>177536</td>
+      <td>Tessa</td>
+      <td>Brooklyn</td>
+      <td>Bushwick</td>
+      <td>40.70641</td>
+      <td>-73.91765</td>
+      <td>Private room</td>
+      <td>50</td>
+      <td>2</td>
+      <td>47</td>
+      <td>2019-06-19</td>
+      <td>0.940000</td>
+      <td>1</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <td>45542</td>
+      <td>Clean and Cozy Harlem Apartment</td>
+      <td>202249</td>
+      <td>Campbell</td>
+      <td>Manhattan</td>
+      <td>Harlem</td>
+      <td>40.82374</td>
+      <td>-73.93730</td>
+      <td>Entire home/apt</td>
+      <td>100</td>
+      <td>2</td>
+      <td>18</td>
+      <td>2018-12-17</td>
+      <td>1.790000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>45940</td>
+      <td>Bright Spacious Luxury Condo</td>
+      <td>204724</td>
+      <td>Miyoung</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71627</td>
+      <td>-73.95870</td>
+      <td>Entire home/apt</td>
+      <td>200</td>
+      <td>4</td>
+      <td>33</td>
+      <td>2019-04-08</td>
+      <td>0.580000</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>46544</td>
+      <td>Park Slope haven 15 mins from Soho</td>
+      <td>8198</td>
+      <td>Monica</td>
+      <td>Brooklyn</td>
+      <td>Park Slope</td>
+      <td>40.67994</td>
+      <td>-73.97863</td>
+      <td>Entire home/apt</td>
+      <td>150</td>
+      <td>5</td>
+      <td>52</td>
+      <td>2019-06-05</td>
+      <td>0.500000</td>
+      <td>1</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>47370</td>
+      <td>Chelsea Studio sublet 1 - 2 months</td>
+      <td>214287</td>
+      <td>Alex</td>
+      <td>Manhattan</td>
+      <td>Chelsea</td>
+      <td>40.74031</td>
+      <td>-73.99999</td>
+      <td>Entire home/apt</td>
+      <td>125</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2015-07-17</td>
+      <td>0.030000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>53137</td>
+      <td>Quiet, sunny Midtown Manhattan apt.</td>
+      <td>240360</td>
+      <td>Marlaine</td>
+      <td>Manhattan</td>
+      <td>Hell's Kitchen</td>
+      <td>40.76244</td>
+      <td>-73.99271</td>
+      <td>Entire home/apt</td>
+      <td>195</td>
+      <td>5</td>
+      <td>10</td>
+      <td>2019-07-01</td>
+      <td>1.010000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>53196</td>
+      <td>Big Room/Washer-Dryer/Wifi/AC/JMZ</td>
+      <td>247432</td>
+      <td>Charlotte</td>
+      <td>Brooklyn</td>
+      <td>Bedford-Stuyvesant</td>
+      <td>40.69546</td>
+      <td>-73.93503</td>
+      <td>Private room</td>
+      <td>80</td>
+      <td>2</td>
+      <td>11</td>
+      <td>2017-11-13</td>
+      <td>0.480000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>55498</td>
+      <td>Modern comfort in art infused landmark Brownstone</td>
+      <td>262138</td>
+      <td>Tami</td>
+      <td>Brooklyn</td>
+      <td>Bedford-Stuyvesant</td>
+      <td>40.68290</td>
+      <td>-73.93549</td>
+      <td>Private room</td>
+      <td>71</td>
+      <td>2</td>
+      <td>23</td>
+      <td>2019-07-01</td>
+      <td>0.220000</td>
+      <td>1</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <td>55982</td>
+      <td>Cozy 2 br in sunny Fort Greene apt</td>
+      <td>264928</td>
+      <td>Sally</td>
+      <td>Brooklyn</td>
+      <td>Fort Greene</td>
+      <td>40.68656</td>
+      <td>-73.97525</td>
+      <td>Private room</td>
+      <td>68</td>
+      <td>3</td>
+      <td>37</td>
+      <td>2018-12-31</td>
+      <td>0.350000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>56525</td>
+      <td>1 Bedroom Loft w/ Private Roof Deck</td>
+      <td>268014</td>
+      <td>Alex</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>40.72900</td>
+      <td>-73.95829</td>
+      <td>Entire home/apt</td>
+      <td>195</td>
+      <td>2</td>
+      <td>69</td>
+      <td>2019-06-13</td>
+      <td>0.650000</td>
+      <td>1</td>
+      <td>58</td>
+    </tr>
+    <tr>
+      <td>59642</td>
+      <td>Franklin St Flat in Trendy Greenpoint Brooklyn</td>
+      <td>274782</td>
+      <td>Betty</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>40.73401</td>
+      <td>-73.95967</td>
+      <td>Entire home/apt</td>
+      <td>135</td>
+      <td>2</td>
+      <td>69</td>
+      <td>2019-05-19</td>
+      <td>0.670000</td>
+      <td>1</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>60457</td>
+      <td>Spacious Greenwich Village Apt</td>
+      <td>99212</td>
+      <td>Jessica</td>
+      <td>Manhattan</td>
+      <td>Greenwich Village</td>
+      <td>40.73194</td>
+      <td>-73.99474</td>
+      <td>Entire home/apt</td>
+      <td>225</td>
+      <td>5</td>
+      <td>10</td>
+      <td>2019-05-11</td>
+      <td>0.100000</td>
+      <td>1</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <td>60794</td>
+      <td>Bright and spacious, garden below!</td>
+      <td>293394</td>
+      <td>Rachel</td>
+      <td>Manhattan</td>
+      <td>Upper West Side</td>
+      <td>40.80021</td>
+      <td>-73.96071</td>
+      <td>Entire home/apt</td>
+      <td>195</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2017-08-25</td>
+      <td>0.040000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>61167</td>
+      <td>Colorful Private One Bedroom Apt</td>
+      <td>295760</td>
+      <td>Greta</td>
+      <td>Manhattan</td>
+      <td>Little Italy</td>
+      <td>40.71961</td>
+      <td>-73.99540</td>
+      <td>Entire home/apt</td>
+      <td>135</td>
+      <td>2</td>
+      <td>21</td>
+      <td>2015-12-12</td>
+      <td>0.200000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>62903</td>
+      <td>Beautiful modern studio apartment in heart of NYC</td>
+      <td>306605</td>
+      <td>Daniel</td>
+      <td>Manhattan</td>
+      <td>Chelsea</td>
+      <td>40.74238</td>
+      <td>-73.99567</td>
+      <td>Entire home/apt</td>
+      <td>205</td>
+      <td>9</td>
+      <td>62</td>
+      <td>2019-06-21</td>
+      <td>0.700000</td>
+      <td>2</td>
+      <td>76</td>
+    </tr>
+    <tr>
+      <td>64015</td>
+      <td>Prime East Village 1 Bedroom</td>
+      <td>146944</td>
+      <td>David</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72807</td>
+      <td>-73.98594</td>
+      <td>Entire home/apt</td>
+      <td>200</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2019-06-23</td>
+      <td>1.373221</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>65268</td>
+      <td>Share a HOME - $75 for 1 bdrm/++ for 2 - Brooklyn</td>
+      <td>319092</td>
+      <td>Juhli</td>
+      <td>Brooklyn</td>
+      <td>Bedford-Stuyvesant</td>
+      <td>40.68276</td>
+      <td>-73.95264</td>
+      <td>Private room</td>
+      <td>75</td>
+      <td>5</td>
+      <td>64</td>
+      <td>2019-01-05</td>
+      <td>0.670000</td>
+      <td>1</td>
+      <td>68</td>
+    </tr>
+    <tr>
+      <td>65556</td>
+      <td>Room in S3rd/Bedford, Williamsburg</td>
+      <td>320422</td>
+      <td>Marlon</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71368</td>
+      <td>-73.96260</td>
+      <td>Private room</td>
+      <td>60</td>
+      <td>3</td>
+      <td>0</td>
+      <td>2019-06-23</td>
+      <td>1.373221</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>66251</td>
+      <td>East Village Loft with Piano &amp; Patio</td>
+      <td>324460</td>
+      <td>Samir</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.72681</td>
+      <td>-73.98534</td>
+      <td>Entire home/apt</td>
+      <td>212</td>
+      <td>3</td>
+      <td>67</td>
+      <td>2019-06-25</td>
+      <td>1.310000</td>
+      <td>1</td>
+      <td>51</td>
+    </tr>
+    <tr>
+      <td>69921</td>
+      <td>Brooklyn Writer's Nook</td>
+      <td>155689</td>
+      <td>Joab</td>
+      <td>Brooklyn</td>
+      <td>Bushwick</td>
+      <td>40.70514</td>
+      <td>-73.91922</td>
+      <td>Private room</td>
+      <td>70</td>
+      <td>5</td>
+      <td>47</td>
+      <td>2019-06-29</td>
+      <td>0.490000</td>
+      <td>1</td>
+      <td>203</td>
+    </tr>
+    <tr>
+      <td>70128</td>
+      <td>Large, Sunny Room East Village NYC</td>
+      <td>354330</td>
+      <td>Eyal</td>
+      <td>Manhattan</td>
+      <td>East Village</td>
+      <td>40.73198</td>
+      <td>-73.98881</td>
+      <td>Private room</td>
+      <td>65</td>
+      <td>3</td>
+      <td>52</td>
+      <td>2019-01-10</td>
+      <td>0.630000</td>
+      <td>1</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>71384</td>
+      <td>Gigantic Private Brooklyn Loft!</td>
+      <td>365153</td>
+      <td>Ben</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>40.72898</td>
+      <td>-73.95552</td>
+      <td>Entire home/apt</td>
+      <td>229</td>
+      <td>1</td>
+      <td>50</td>
+      <td>2014-05-13</td>
+      <td>0.500000</td>
+      <td>1</td>
+      <td>188</td>
+    </tr>
+    <tr>
+      <td>72265</td>
+      <td>Private room in cozy Greenpoint</td>
+      <td>340692</td>
+      <td>Vanessa</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>40.72646</td>
+      <td>-73.95341</td>
+      <td>Private room</td>
+      <td>59</td>
+      <td>3</td>
+      <td>29</td>
+      <td>2019-06-16</td>
+      <td>0.360000</td>
+      <td>1</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>74073</td>
+      <td>Food &amp; Music Dream Apartment in Williamsburg</td>
+      <td>211877</td>
+      <td>Daniel</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>40.71015</td>
+      <td>-73.96101</td>
+      <td>Entire home/apt</td>
+      <td>195</td>
+      <td>4</td>
+      <td>59</td>
+      <td>2019-06-23</td>
+      <td>0.600000</td>
+      <td>1</td>
+      <td>71</td>
+    </tr>
+    <tr>
+      <td>74860</td>
+      <td>Sunlit and Cozy Williamsburg/Greenpoint, Brooklyn</td>
+      <td>394752</td>
+      <td>Allison</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>40.72488</td>
+      <td>-73.95018</td>
+      <td>Private room</td>
+      <td>55</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2011-03-28</td>
+      <td>0.010000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>77936</td>
+      <td>Hells Kitchen Garden of Eden</td>
+      <td>134355</td>
+      <td>Moss Owen</td>
+      <td>Manhattan</td>
+      <td>Hell's Kitchen</td>
+      <td>40.76248</td>
+      <td>-73.99130</td>
+      <td>Private room</td>
+      <td>150</td>
+      <td>3</td>
+      <td>36</td>
+      <td>2019-06-14</td>
+      <td>0.360000</td>
+      <td>1</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <td>78919</td>
+      <td>Historic House Boerum Hill, BK, NYC</td>
+      <td>422561</td>
+      <td>Nancy</td>
+      <td>Brooklyn</td>
+      <td>Boerum Hill</td>
+      <td>40.68674</td>
+      <td>-73.98876</td>
+      <td>Entire home/apt</td>
+      <td>135</td>
+      <td>4</td>
+      <td>6</td>
+      <td>2016-02-05</td>
+      <td>0.100000</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+    <h2>Dataset 2 — Summary</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Before Cleaning</h3>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rows</th>
+      <th>columns</th>
+      <th>missing_values_total</th>
+      <th>duplicate_rows</th>
+      <th>numeric_columns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>40881</td>
+      <td>16</td>
+      <td>1296</td>
+      <td>0</td>
+      <td>category_id, views, likes, dislikes, comment_count</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        <div class="card">
+            <h3>After Cleaning</h3>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rows</th>
+      <th>columns</th>
+      <th>missing_values_total</th>
+      <th>duplicate_rows</th>
+      <th>numeric_columns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>24053</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+      <td>category_id, views, likes, dislikes, comment_count</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </div>
+
+    <h3>Dataset 2 — First 50 Cleaned Rows</h3>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>video_id</th>
+      <th>trending_date</th>
+      <th>title</th>
+      <th>channel_title</th>
+      <th>category_id</th>
+      <th>publish_time</th>
+      <th>tags</th>
+      <th>views</th>
+      <th>likes</th>
+      <th>dislikes</th>
+      <th>comment_count</th>
+      <th>thumbnail_link</th>
+      <th>comments_disabled</th>
+      <th>ratings_disabled</th>
+      <th>video_error_or_removed</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>43sm-QwLcx4</td>
+      <td>17.14.11</td>
+      <td>Finally Sheldon is winning an argument about the existence of God</td>
+      <td>Sheikh Musa</td>
+      <td>22</td>
+      <td>2017-11-10T14:10:46.000Z</td>
+      <td>God|"Sheldon Cooper"|"Young Sheldon"</td>
+      <td>505161</td>
+      <td>4135</td>
+      <td>976</td>
+      <td>1484</td>
+      <td>https://i.ytimg.com/vi/43sm-QwLcx4/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Sheldon is roasting pastor of the church\nyoung Sheldon season 01 episode 3</td>
+    </tr>
+    <tr>
+      <td>8NHA23f7LvU</td>
+      <td>17.14.11</td>
+      <td>Jason Momoa Wows Hugh Grant With Some Dothraki | The Graham Norton Show</td>
+      <td>The Graham Norton Show</td>
+      <td>24</td>
+      <td>2017-11-10T19:06:23.000Z</td>
+      <td>Graham Norton|"Graham Norton Show Official"|"Entertainment"|"Chat Show"|"Graham Norton full episodes"|"the graham Norton show full eps"|"graham Norton full eps"|"watch graham Norton online"|"jason momoa"|"hugh grant"|"sarah millican"|"kelly clarkson"|"graham norton red chair"|"game of thrones"</td>
+      <td>1496225</td>
+      <td>16116</td>
+      <td>236</td>
+      <td>605</td>
+      <td>https://i.ytimg.com/vi/8NHA23f7LvU/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>I think Sarah Millican was very excited for this!\nSubscribe for weekly updates: http://www.youtube.com/subscription_center?add_user=officialgrahamnorton</td>
+    </tr>
+    <tr>
+      <td>nc99ccSXST0</td>
+      <td>17.14.11</td>
+      <td>5 Ice Cream Gadgets put to the Test</td>
+      <td>CrazyRussianHacker</td>
+      <td>28</td>
+      <td>2017-11-12T21:50:37.000Z</td>
+      <td>5 Ice Cream Gadgets|"Ice Cream"|"Cream Sandwich Maker"|"gadgets"|"gadget review"|"review"|"unboxing"|"kitchen gadgets"|"Gadgets put to the Test"|"testing"|"10 Kitchen Gadgets"|"7 Camping Coffee Gadgets"|"10 Kitchen Gadgets put to the Test"</td>
+      <td>817732</td>
+      <td>23663</td>
+      <td>778</td>
+      <td>3432</td>
+      <td>https://i.ytimg.com/vi/nc99ccSXST0/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Ice Cream Pint Combination Lock - http://amzn.to/2ACipdI\nMini Ice Cream Sandwich Maker - http://amzn.to/2ACiX3g\nMotorized Ice Cream Cone - http://amzn.to/2jkrYdg\nBall Ice Cream Maker - http://amzn.to/2AEbtwE\nScoop and Stack - http://amzn.to/2zEMhGo\n\nSubscribe to: \n2nd channel - https://www.youtube.com/user/origami768\ninstagram https://instagram.com/crazyrussianhacker/\nfacebook - https://www.facebook.com/CrazyRussianHacker\n\nDON'T TRY THIS AT HOME!\n\nBusiness email: crh.inquire@gmail.com\n\nFAN MAIL:  \nCRAZY RUSSIAN HACKER\nP.O. Box 49\nWaynesville, NC 28786\n\nDISCLAIMER: In this video description contains affiliate links, which means that if you click on one of the product links, I’ll receive a small commission.</td>
+    </tr>
+    <tr>
+      <td>puqaWrEC7tY</td>
+      <td>17.14.11</td>
+      <td>Nickelback Lyrics: Real or Fake?</td>
+      <td>Good Mythical Morning</td>
+      <td>24</td>
+      <td>2017-11-13T11:00:04.000Z</td>
+      <td>rhett and link|"gmm"|"good mythical morning"|"rhett and link good mythical morning"|"good mythical morning rhett and link"|"mythical morning"|"Season 12"|"nickelback lyrics"|"nickelback lyrics real or fake"|"nickelback"|"nickelback songs"|"nickelback song"|"rhett link nickelback"|"gmm nickelback"|"lyrics (website category)"|"nickelback (musical group)"|"rock"|"music"|"lyrics"|"chad kroeger"|"canada"|"music (industry)"|"mythical"|"gmm challenge"|"comedy"|"funny"|"challenge"</td>
+      <td>343168</td>
+      <td>10172</td>
+      <td>666</td>
+      <td>2146</td>
+      <td>https://i.ytimg.com/vi/puqaWrEC7tY/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Today we find out if Link is a Nickelback amateur or a secret Nickelback devotee. GMM #1218\nDon't miss an all new Ear Biscuits: https://goo.gl/xeZNQt\nWatch Part 4: https://youtu.be/MhCdiiB8CQg | Watch Part 2: https://youtu.be/7qiOrNao9fg\nWatch today's episode from the start: http://bit.ly/GMM1218\n\nPick up all of the official GMM merch only at https://mythical.store\n\nFollow Rhett &amp; Link: \nInstagram: https://instagram.com/rhettandlink\nFacebook: https://facebook.com/rhettandlink\nTwitter: https://twitter.com/rhettandlink\nTumblr: https://rhettandlink.tumblr.com\nSnapchat: @realrhettlink\nWebsite: https://mythical.co/\n\nCheck Out Our Other Mythical Channels:\nGood Mythical MORE: https://youtube.com/goodmythicalmore\nRhett &amp; Link: https://youtube.com/rhettandlink\nThis Is Mythical: https://youtube.com/thisismythical\nEar Biscuits: https://applepodcasts.com/earbiscuits\n\nWant to send us something? https://mythical.co/contact\nHave you made a Wheel of Mythicality intro video? Submit it here: https://bit.ly/GMMWheelIntro\n\nIntro Animation by Digital Twigs: https://www.digitaltwigs.com\nIntro &amp; Outro Music by Jeff Zeigler &amp; Sarah Schimeneck https://www.jeffzeigler.com\nWheel of Mythicality theme: https://www.royaltyfreemusiclibrary.com/\nAll Supplemental Music fromOpus 1 Music: https://opus1.sourceaudio.com/\nWe use ‘The Mouse’ by Blue Microphones https://www.bluemic.com/mouse/</td>
+    </tr>
+    <tr>
+      <td>ZhhXLMbZ1rQ</td>
+      <td>17.14.11</td>
+      <td>DO COLLEGE KIDS KNOW 80s MUSIC? #8 (REACT: Do They Know It?)</td>
+      <td>REACT</td>
+      <td>24</td>
+      <td>2017-11-12T20:00:01.000Z</td>
+      <td>80s music|"80s songs"|"madonna"|"DO COLLEGE KIDS KNOW 80s MUSIC? #8 REACT: Do They Know It"|"do they know it"|"react"|"reaction"|"thefinebros"|"fine brothers"|"fine brothers entertainment"|"finebros"|"fine bros"|"FBE"|"laugh challenge"|"try not to laugh"|"try to watch without laughing or grinning"|"react gaming"|"kids versus food"|"staff reacts"|"lyric breakdown"|"Do Teens Know"|"Do Parents Know"|"Do Kids Know"|"Do Elders Know"|"stevie wonder"|"80s music hits"|"80's"</td>
+      <td>549374</td>
+      <td>16832</td>
+      <td>248</td>
+      <td>3579</td>
+      <td>https://i.ytimg.com/vi/ZhhXLMbZ1rQ/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>SUBSCRIBE THEN HIT THE 🔔! New Videos 12pm PT on REACT! https://goo.gl/7SnCnC\nWatch all Do They Know It Eps! https://goo.gl/uAVnoI\nWatch all REACT channel videos from this week! https://goo.gl/th0yyt\nWatch latest FBE videos: https://goo.gl/aU5PSm \n\nNot seeing your favorite 80s song? We likely featured it in another episode of the show! https://goo.gl/uAVnoI\n\nThis episode features the following College Kids:\nBrandon\nhttps://www.youtube.com/c/brandocommandoyaboi\nBrittany\nhttps://www.instagram.com/brittcuadra/\nBrooklin\nhttps://www.instagram.com/brooklinf/\nChristopher\nhttps://www.instagram.com/chrisorzame/\nEric\nhttps://www.youtube.com/4N1\nKaelyn\nhttps://www.youtube.com/channel/UCzDbXLBfnlydSmL3L2BUWqQ\nLeah\nhttps://www.instagram.com/lleeeaaaahhhhh/\nTom\nhttps://www.youtube.com/user/ImBostonTom\n\nMERCH 👕 https://www.shopfbe.com\n\nFollow Fine Brothers Entertainment:\nFBE WEBSITE: http://www.finebrosent.com\nFBE CHANNEL: http://www.youtube.com/FBE\nREACT CHANNEL: http://www.youtube.com/REACT\nBONUS CHANNEL: https://www.youtube.com/FBE2\nFACEBOOK: http://www.facebook.com/FBE\nFACEBOOK: http://www.facebook.com/FBEShows\nTWITTER: http://www.twitter.com/fbe\nINSTAGRAM: http://www.instagram.com/fbe\nSNAPCHAT: https://www.snapchat.com/add/finebros\nSOUNDCLOUD: https://soundcloud.com/fbepodcast\niTUNES (Podcast): https://goo.gl/DSdGFT\nGOOGLE PLAY (Podcast): https://goo.gl/UhL6bk\nMUSICAL.LY: @fbe\n\nSEND US STUFF:\nFBE\nP.O. BOX 4324\nValley Village, CA 91617-4324\n\nExecutive Produced by Benny Fine &amp; Rafi Fine\nHead of Post Production - Nick Bergthold\nDirector of Production - Drew Roder\nDigital Production Manager - Andrew Chang\nProduced by Vincent Ieraci\nAssociate Producer -  Katie Harper\nProduction Coordinator - Cynthia Garcia\nAssistant Production Coordinator - Kristy Kiefer\nStudio Technician - Josh Hilton\nProduction Assistant - Locke Alexander\nEditor - Paul Smith\nAssistant Editor - Nicole Worthington\nPost Supervisor - Adam Speas\nPost Coordinator - David Valbuena\nSet Design - Melissa Judson\nGraphics &amp; Animation - Will Hyler\nTheme Music - Cyrus Ghahremani\nOmni-rific by Josh Molen (http://TheTunePeddler.com)\nMusic by: Cormac Bluestone\nhttp://www.youtube.com/cormacbluestone\n\n© Fine Brothers Entertainment.\n\nDo They Know It #91 - DO COLLEGE KIDS KNOW 80s MUSIC? #8 (REACT: Do They Know It?)</td>
+    </tr>
+    <tr>
+      <td>wuf2KinLxZ8</td>
+      <td>17.14.11</td>
+      <td>WRESTLING NIGAHIGA!!! (WILD CARD)</td>
+      <td>HigaTV</td>
+      <td>24</td>
+      <td>2017-11-12T18:20:00.000Z</td>
+      <td>wrestling|"ufc"|"mma"|"nigahiga"|"youtube"|"wwe"|"conor"|"mcgregor"|"floyd"|"mayweather"|"meme"|"sports"|"challenge"|"toy"|"vs"|"ultimate"|"slime"|"eat"|"wear"|"bf"|"gf"|"boyfriend"|"girlfriend"|"gone"|"wrong"|"fail"|"food"|"electric"|"try"|"not"|"cringe"|"laugh"|"touch"|"body"|"war"|"prank"|"compilation"</td>
+      <td>348841</td>
+      <td>27089</td>
+      <td>162</td>
+      <td>2099</td>
+      <td>https://i.ytimg.com/vi/wuf2KinLxZ8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Wow, we filmed a video, named a show, &amp; beat Ryan in one day? This was too easy! Give us a real challenge in the comments below!\n\nFollow WC if you don’t want to:\nDerrick: \nIG: http://www.instagram.com/dereleektv\nTwitter: http://www.twitter.com/dereleektv\n\nPaco:\nIG: http://www.instagram.com/yellowpaco\nTwitter: http://www.twitter.com/yellowpaco\nSnapchat: http://www.snapchat.com/add/yellowpaco\n\nOrder Ryan's book how to write good\nhttp://higatv.com/ryan-higas-how-to-write-good-pre-order-links/\n\nNew Official Store\nhttps://www.gianthugs.com/collections/ryan\n\nNigahiga Channel\nhttp://www.youtube.com/nigahiga\n\nTwitter\nhttp://www.twitter.com/therealryanhiga\n\nFacebook\nhttp://www.facebook.com/higatv\n\nWebsite\nhttp://www.higatv.com\n\nInstagram\nhttp://www.instagram.com/notryanhiga\n\nSend us mail or whatever you want here!\nPO Box 232355\nLas Vegas, NV 89105</td>
+    </tr>
+    <tr>
+      <td>aVTAU_4i9AY</td>
+      <td>17.14.11</td>
+      <td>Throwing Things Into A Fan!</td>
+      <td>REKT</td>
+      <td>24</td>
+      <td>2017-11-12T23:00:00.000Z</td>
+      <td>Industrial Fan|"Industrial Fan Destruction"|"Throwing Things into fan"|"breaking with fan"|"fan blade destruction"|"960 fps"|"480 fps"|"Rekt"|"Gunner"|"Gomez"|"Matthias"|"Hi5"|"Studios"|"Tanner"|"Malmedal"|"Hi5Studios"|"slow"|"motion"|"slomo"|"slowmo"|"family"|"friendly"</td>
+      <td>370827</td>
+      <td>12150</td>
+      <td>325</td>
+      <td>2352</td>
+      <td>https://i.ytimg.com/vi/aVTAU_4i9AY/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Destroying Unbreakable Glasses! ➡ https://www.youtube.com/watch?v=dFm7n5tQzrU\nSubscribe ➡ http://bit.ly/2lgjnsJ\n⬇️ MORE LINKS BELOW ⬇️\n\n🔔 Click That Bell Icon To Be Notified When We Upload! 🔔\n\n⬇️ FOLLOW US ⬇️\n\nINSTA ➡ @Hi5REKT http://bit.ly/2g91lq6\n\nTWITTER ➡ @Hi5REKT http://bit.ly/2vtMFny\n\n🌎 Send Us Items To DESTROY! \n\n(REKT)\n24307 Magic Mountain Pkwy Valencia, CA 91355 P.O. Box #617</td>
+    </tr>
+    <tr>
+      <td>jVpp2BUtMoY</td>
+      <td>17.14.11</td>
+      <td>So We Started A Fire...</td>
+      <td>Philly D</td>
+      <td>22</td>
+      <td>2017-11-13T17:00:04.000Z</td>
+      <td>PhillyD|"Philly D"|"Vloggity"|"The Philip DeFranco Show"|"Philip DeFranco Show"|"DeFrancoElite"|"Vlog"|"Vlogger"|"Docuvlog"|"DeFranco Elite"|"YouTube"|"World Kindness Day"|"Respect"|"Polite"|"Giving"|"Conversation"|"kind"|"therapy"|"all the feels"|"face to face"|"kindness day"|"worst"|"worldkindnessday"|"body shaming"|"cheating"|"fatphobia"|"annoying"|"personality traits"|"body positivity"|"fat shaming"|"dogs"|"dog lover"|"feel good news"|"you are not alone"|"burning effigy"|"giving back"|"share the love"|"spread the love"</td>
+      <td>92280</td>
+      <td>11045</td>
+      <td>182</td>
+      <td>1412</td>
+      <td>https://i.ytimg.com/vi/jVpp2BUtMoY/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Happy World Kindness Day! Call that family member, text that friend, buy that coworkers lunch. Do something for someone else today, you never know who might need some kindness in their life.  \n\nSupport what we're making: http://DeFrancoElite.com\nThe Latest PDS: https://youtu.be/iSexsVbz554\nTheDeFrancoFam: https://youtu.be/_OUiaSE7pHI\n\nWanna say hello? Tell us what you thought?\nDani R - https://twitter.com/GrownWomanChild \nKristy P - https://twitter.com/KristyyLovee \n\nAmanda M - https://twitter.com/MandaOhDang \nBrian B - https://twitter.com/brianjborst\n\nJames G - https://twitter.com/jamesgirardier \nKeith B - https://twitter.com/KeithWOaCrew \n\nZack T - https://twitter.com/zacktaylor_92 \nBriana D - https://twitter.com/Brianadunc \n\n————————————\nFollow Me On Social!\n————————————\nFACEBOOK: http://on.fb.me/mqpRW7\nTWITTER: http://Twitter.com/PhillyD\nINSTAGRAM: https://instagram.com/phillydefranco/\nSNAPCHAT: TheDeFrancoFam\nREDDIT: https://www.reddit.com/r/DeFranco\nITUNES: http://DeFrancoMistakes.com\nSOUNDCLOUD: http://letsmakemistakestogether.com\nGOOGLE PLAY: http://mistakeswithdefranco.com\n\nEdited by Keith Battista: http://twitter.com/KeithWOaCrew\n\nP.O. BOX\nAttn: Philip DeFranco\n16350 Ventura Blvd\nSuite D #542\nEncino, CA 91436\n\nSome music by David Cutter: http://davidcuttermusic.co.uk</td>
+    </tr>
+    <tr>
+      <td>m-nZmgHWoEw</td>
+      <td>17.14.11</td>
+      <td>Mythical Dog Party</td>
+      <td>Good Mythical MORE</td>
+      <td>24</td>
+      <td>2017-11-13T11:00:06.000Z</td>
+      <td>rhett and link|"good mythical more"|"rhett and link good mythical more"|"good mythical more rhett and link"|"season 12"|"mythical dog party"|"mythical crew"|"rhett"|"link"|"gmm"|"gmmore"|"gmm crew"|"rhett link dog"|"rhett link dogs"|"dogs"|"party"|"mythical"|"nickelback"|"nickelback rockstar"|"nickelback photograph"|"nickelback how you remind me"|"nickelback songs"|"rescue dog"|"rescue dogs"|"adopted dog"|"adopted dogs"|"cute dog"|"cute dogs"|"dog"</td>
+      <td>116676</td>
+      <td>4324</td>
+      <td>136</td>
+      <td>618</td>
+      <td>https://i.ytimg.com/vi/m-nZmgHWoEw/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>We're hanging with some of the dogs of the Mythical Crew &amp; forcing the Lyrical Loser to endure as much Nickelback as they can stand. \nWatch today's GMM: http://bit.ly/GMM1218 | Watch a previous GMM: http://bit.ly/GMM1217 \n\nPick up all of the official GMM merch only at https://mythical.store\n\nFollow Rhett &amp; Link: \nInstagram: https://instagram.com/rhettandlink\nFacebook: https://facebook.com/rhettandlink\nTwitter: https://twitter.com/rhettandlink\nTumblr: https://rhettandlink.tumblr.com\nSnapchat: @realrhettlink\nWebsite: https://mythical.co\n\nCheck Out Our Other Mythical Channels:\nGood Mythical Morning: https://youtube.com/goodmythicalmorning\nRhett &amp; Link: https://youtube.com/rhettandlink\nThis Is Mythical: https://youtube.com/thisismythical\nEar Biscuits: https://applepodcasts.com/earbiscuits\n\nWant to send us something? https://mythical.co/contact\nHave you made a Whee of Mythicality intro video? Submit it here: https://bit.ly/GMMWheelIntro\n\nIntro Animation by Digital Twigs: https://www.digitaltwigs.com\nIntro &amp; Outro Music by Jeff Zeigler &amp; Sarah Schimeneck https://www.jeffzeigler.com\nWheel of Mythicality theme: https://www.royaltyfreemusiclibrary.com/\nAll Supplemental Music fromOpus 1 Music: https://opus1.sourceaudio.com/\nWe use ‘The Mouse’ by Blue Microphones https://www.bluemic.com/mouse/</td>
+    </tr>
+    <tr>
+      <td>_A5Z00E5gx8</td>
+      <td>17.14.11</td>
+      <td>急诊科医生 | Emergency Physician 25（张嘉译、王珞丹、柯蓝等主演）</td>
+      <td>麻辣变形计 HOT GIRL</td>
+      <td>22</td>
+      <td>2017-11-12T16:00:02.000Z</td>
+      <td>马克|"迪丽热巴"|"麻辣变形计"|"军旅"|"美女"|"感情"|"都市"|"电视剧"|"热播"|"火辣"|"女军"|"制服"|"张嘉译"|"王珞丹"|"江珊"|"柯蓝"|"巩峥"|"zhangjiayi"|"wangluodan"|"jiangshan"|"kelan"|"kongzheng"</td>
+      <td>123778</td>
+      <td>82</td>
+      <td>20</td>
+      <td>64</td>
+      <td>https://i.ytimg.com/vi/_A5Z00E5gx8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>【欢迎订阅本频道】\n\n该剧讲述了急诊科主任医生何建一与海归医生江晓琪从一开始的互相审视，到互相理解、渐生情愫，并携手克服种种困难，救治患者，救赎自我的故事。</td>
+    </tr>
+    <tr>
+      <td>wczm1faUZ1Q</td>
+      <td>17.14.11</td>
+      <td>Barnicle: World Leaders Are Laughing At The US | Morning Joe | MSNBC</td>
+      <td>MSNBC</td>
+      <td>25</td>
+      <td>2017-11-13T14:53:22.000Z</td>
+      <td>Morning Joe|"Joe Scarborough"|"Mika Brzezinski"|"Willie Geist"|"MSNBC"|"MSNBC news"|"MSNBC live"|"MSNBC TV"|"news"|"breaking news"|"current events"|"US news"|"politics"|"politics news"|"political news"|"elections"|"president trump putin comments"|"president vladimir putin"|"russia meddling"|"vladimir putin"|"putin"|"president trump"|"trump in asia"|"trump in vietnam"|"apec 2017"|"russian"|"president putin"|"trump asia trip"|"election 2016"|"election hacking"</td>
+      <td>200264</td>
+      <td>2947</td>
+      <td>317</td>
+      <td>2321</td>
+      <td>https://i.ytimg.com/vi/wczm1faUZ1Q/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Over the weekend, President Trump raised eyebrows when he stated he believed Russian President Vladimir Putin's assertions that Russia didn't meddle in the 2016 election, which Trump later corrected.\n» Subscribe to MSNBC: http://on.msnbc.com/SubscribeTomsnbc\n\nAbout: MSNBC is the premier destination for in-depth analysis of daily headlines, insightful political commentary and informed perspectives. Reaching more than 95 million households worldwide, MSNBC offers a full schedule of live news coverage, political opinions and award-winning documentary programming -- 24 hours a day, 7 days a week.\n\nConnect with MSNBC Online\nVisit msnbc.com: http://on.msnbc.com/Readmsnbc\nFind MSNBC on Facebook: http://on.msnbc.com/Likemsnbc\nFollow MSNBC on Twitter: http://on.msnbc.com/Followmsnbc\nFollow MSNBC on Google+: http://on.msnbc.com/Plusmsnbc\nFollow MSNBC on Instagram: http://on.msnbc.com/Instamsnbc\nFollow MSNBC on Tumblr: http://on.msnbc.com/LeanWithmsnbc\n\nBarnicle: World Leaders Are Laughing At The US | Morning Joe | MSNBC</td>
+    </tr>
+    <tr>
+      <td>uEu5--lyNCE</td>
+      <td>17.14.11</td>
+      <td>Cats Hate Pregnant - Off Topic #102</td>
+      <td>Achievement Hunter</td>
+      <td>20</td>
+      <td>2017-11-12T18:00:03.000Z</td>
+      <td>Achievement Hunter|"AH"|"video game"|"gaming"|"game"|"gameplay"|"game play"|"michael jones"|"ryan haywood"|"lindsay jones"|"gavin free"|"jeremy dooley"|"jack pattillo"|"extra life"|"movies"|"comedy"|"funny"|"cats"|"babies"|"million dollars but"|"jeff goldblum"|"thor ragnarok"|"justice league"|"xbox one x"|"sky factory"|"samuel jackson"|"spider man homecoming"|"ready player one"|"fuel"|"git gud"|"action league now"|"daria"|"cuphead"|"lion king"|"james buckley"|"alan ritchson"|"off topic"|"podcast"|"last call"|"bar"</td>
+      <td>191353</td>
+      <td>3307</td>
+      <td>85</td>
+      <td>534</td>
+      <td>https://i.ytimg.com/vi/uEu5--lyNCE/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>The AH Crew sit down to talk about Jeremy’s bad morning, baby sounds, Extra Life and more on this week's Off Topic! Join FIRST to watch episodes early: http://bit.ly/2eHXQn0\n\nThis episode originally aired November 10, 2017 and is sponsored by Beachbody on Demand (http://bit.ly/2wekldC) and the Rooster Teeth Store (http://bit.ly/2dJMiSK)\n\n» Get your Achievement Hunter merch: http://bit.ly/2wqFb6V\n» Subscribe: http://bit.ly/AHYTChannel\n\nAbout Achievement Hunter:\nHello fellow Gamer. This you should watch me. I play game. Good. Thank you, thank you. If you watch me, I'm hot. Videos, they'll be better... The Achievement Hunter view is the right thing to do YouTube, so do.\n\nMore from Achievement Hunter:\n» Let's Play: http://bit.ly/1BuRgl1 \n» Rooster Teeth: http://bit.ly/13y3Gum\n\nhttps://www.youtube.com/user/achievementhunter</td>
+    </tr>
+    <tr>
+      <td>FSdg3UVuBKE</td>
+      <td>17.14.11</td>
+      <td>Autumn's sick...</td>
+      <td>Sugar Pine 7</td>
+      <td>24</td>
+      <td>2017-11-13T03:08:01.000Z</td>
+      <td>sugar pine 7|"steven suptic"|"autumn"|"sick"|"parker"|"vape"|"vapers"</td>
+      <td>182330</td>
+      <td>14901</td>
+      <td>55</td>
+      <td>1442</td>
+      <td>https://i.ytimg.com/vi/FSdg3UVuBKE/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>She needs your prayers.\nNEW MERCH!\nhttps://store.roosterteeth.com/collections/sugar-pine-7\n\nSteve:\nhttps://twitter.com/StevenSuptic\n\nAutumn:\nhttps://twitter.com/_rufhaus?lang=en\n\nJames:\nhttps://twitter.com/jamesdeangeliz?lang=en\n\nCib:\nhttps://twitter.com/notCIB?lang=en\n\nElliott:\nhttps://twitter.com/ElliottcMorgan?lang=en\n\nParker:\nhttps://twitter.com/ParkerGames?lang=en\n\nJeremy:\nhttps://twitter.com/JeremySauder?lang=en\n\nClick to Subscribe and become just another cog in the machine:\nhttps://www.youtube.com/user/mlghwnt?sub_confirmation=1</td>
+    </tr>
+    <tr>
+      <td>6xT1Xc7_X3k</td>
+      <td>17.14.11</td>
+      <td>He Almost Died Pier Jumping ...</td>
+      <td>Danny Duncan</td>
+      <td>23</td>
+      <td>2017-11-12T22:55:07.000Z</td>
+      <td>danny duncan|"danny duncan 69"|"kevin"|"danny duncan vlogs"|"danny duncan pranks"|"santa monica pier"|"jumping off santa monica pier"|"guy jumps off santa monica pier"|"pier jump fails"|"california"|"stunts"</td>
+      <td>524623</td>
+      <td>34460</td>
+      <td>237</td>
+      <td>2490</td>
+      <td>https://i.ytimg.com/vi/6xT1Xc7_X3k/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Glad we're alive. Thanks for watching guys I love you!\n\nMerchandise ▶ http://DannyDuncan69.com\nTwitter ▶ http://www.twitter.com/DannyDuncan69\nInstagram ▶ http://www.instagram.com/DannyDuncan69\nFacebook▶ http://www.facebook.com/DannyDuncan69\nSnapchat ▶ http://snpcht.me/DannyDuncan69\n\nFan mail send to:\nDanny Duncan\nPO BOX 75252\nLos Angeles, CA 90020</td>
+    </tr>
+    <tr>
+      <td>JwboxqDylgg</td>
+      <td>17.14.11</td>
+      <td>Canada Soccer's Women's National Team v USA International Friendly LIVE from Avaya Stadium, San Jose</td>
+      <td>Canada Soccer</td>
+      <td>17</td>
+      <td>2017-11-13T05:53:49.000Z</td>
+      <td>[none]</td>
+      <td>36311</td>
+      <td>277</td>
+      <td>28</td>
+      <td>13</td>
+      <td>https://i.ytimg.com/vi/JwboxqDylgg/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Canada Soccer's Women's National Team face rivals USA in an International Friendly LIVE from Avaya Stadium, San Jose, California November 12, 2017</td>
+    </tr>
+    <tr>
+      <td>t3FYESkzjUI</td>
+      <td>17.14.11</td>
+      <td>Emotionally Responsive Digital Human</td>
+      <td>Soul Machines</td>
+      <td>22</td>
+      <td>2017-10-31T01:11:48.000Z</td>
+      <td>artificial intelligence|"digital human"|"virtual assistant"|"machine learning"|"technology"</td>
+      <td>3684</td>
+      <td>4</td>
+      <td>5</td>
+      <td>1</td>
+      <td>https://i.ytimg.com/vi/t3FYESkzjUI/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Soul Machines is making machines more human</td>
+    </tr>
+    <tr>
+      <td>ThLVteoxnSE</td>
+      <td>17.14.11</td>
+      <td>LFR11 - Game 19 - B Sweeper - Tor 4, Bos 1</td>
+      <td>SteveDangle</td>
+      <td>17</td>
+      <td>2017-11-12T21:11:04.000Z</td>
+      <td>Toronto Maple Leafs|"Maple Leafs"|"Leafs"|"Boston Bruins"|"Morgan Rielly"|"James van Riemsdyk"|"Mitch Marner"|"Curtis McElhinney"|"Steve Dangle"</td>
+      <td>28992</td>
+      <td>1409</td>
+      <td>9</td>
+      <td>188</td>
+      <td>https://i.ytimg.com/vi/ThLVteoxnSE/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>And it stayed 4-1, the way it always should have been.\nHHOF Article: http://www.sportsnet.ca/hockey/nhl/patrick-marleau-timer-comes-game-winning-goals/\nBerkshire on the Leafs: http://www.sportsnet.ca/hockey/nhl/examining-maple-leafs-fast-start-cold-streak/</td>
+    </tr>
+    <tr>
+      <td>oo_xQyxgNpg</td>
+      <td>17.14.11</td>
+      <td>蒙面唱将猜猜猜第二季 EP10 Ella抛媚眼狂撩侦探奥特曼 171112</td>
+      <td>蒙面唱将猜猜猜2重磅归来</td>
+      <td>22</td>
+      <td>2017-11-12T15:46:02.000Z</td>
+      <td>蒙面唱将猜猜猜第二季|"江苏卫视"|"灿星制作"|"真人秀"|"音乐"|"综艺"|"陶晶莹"|"陈嘉桦"|"大张伟"|"巫启贤"|"李响"|"张智霖"|"黄晓明"|"范玮琪"|"成方圆"|"李荣浩"|"林俊杰"|"郑恺"|"黎明"|"陶喆"|"周传雄"|"萱萱"|"吉克隽逸"|"杜德伟"|"马丽"|"苏慧伦"|"刘维"|"李慧珍"|"薛之谦"|"汪苏泷"|"孙杨"|"黄丽玲"|"周笔畅"|"陈洁仪"|"腾格尔"|"陈梓童"|"雪村"|"霍尊"|"GAI"|"斯琴 格日乐"|"常石磊"|"潘粤 明"|"taojingying"|"Ella"|"dazhangwei"|"zhangzhilin"|"huangxiaoming"|"fanweiqi"|"chengfangyuan"|"lironghao"|"linjunjie"|"zhengkai"|"liming"|"taozhe"|"zhouchuanxio ng"|"xuanxuan"|"dudewei"|"jikejunyi"|"mali"|"suhuilun"|"liuwei"|"lihuizhen"|"xuezhiqian"|"wnagsulong"|"sunyang"|"huangliling"|"zhoubichang"|"chenjieyi"|"tenggeer"|"c henzitong"|"xuecun"|"huozun"</td>
+      <td>268111</td>
+      <td>447</td>
+      <td>100</td>
+      <td>240</td>
+      <td>https://i.ytimg.com/vi/oo_xQyxgNpg/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>【欢迎订阅蒙面唱將猜猜猜YouTube频道】\nhttps://goo.gl/h44LpF\n\n《蒙面唱将猜猜猜第二季》在玩法和嘉宾阵容较上一季都有了进一步升级。陶晶莹、巫启贤、Ella、大张伟将以老朋友的身份再度加盟，还会融入《跨界\n\n歌王》的元素，邀来演艺界、曲艺界、文艺界和体育界的实力唱将跨界加盟。在保留熟悉“配方”之\n\n外，猜评团迎来了重大升级，九位成员每期都有新面孔，还特别加入一位神秘大咖成为“飞行猜评员”……\n\n★《蒙面唱将猜猜猜》第二季重磅来袭 赛制升级听歌猜人更难【欢迎订阅】\nhttps://goo.gl/A9g7ZK\n\n★《蒙面唱将猜猜猜》第一季完整版【欢迎订阅】\nhttps://goo.gl/YVBQH5\n\n★國內首檔EDM音樂節目《蓋世英雄》——王力宏、鳥叔綜藝首秀 鄧紫棋強勢加盟【歡迎訂閱】\nhttps://goo.gl/Z7voB9\n\n★《一路上有你》第二季——张智霖袁咏仪再加盟 三位老公“造反”组不怕老婆联盟 【欢迎订阅】\nhttps://goo.gl/JAOkEm\n\n★《出发吧爱情》—— “全能好丈夫”吴京户外生存技能获赞 戚薇李承铉花式秀恩爱【欢迎订阅】\nhttps://goo.gl/N8ZBJ</td>
+    </tr>
+    <tr>
+      <td>teXaL6GdQRk</td>
+      <td>17.14.11</td>
+      <td>STRANGER JOKES : Jokes de Papa avec les teens de Stranger Things</td>
+      <td>Le Jeu, C'est Sérieux</td>
+      <td>23</td>
+      <td>2017-11-13T15:48:57.000Z</td>
+      <td>Stranger Jokes|"Jokes de Papa"|"Stranger Things"|"Charlie Heaton"|"Natalia Dyer"|"Joe Keery"|"Drôle"|"Humour"|"Blagues nulles"|"Dad Jokes"|"Netflix"|"Demogorgon"|"Onze"|"Eleven"|"Will"|"Joyce"|"Jonathan"|"Nancy"|"Steve"|"Paris Games Week"|"Try Not To Laugh"|"Try Not To Cringe"|"Essaye de ne pas rire"|"JeuSerieux"|"France"|"Québec"</td>
+      <td>141253</td>
+      <td>14354</td>
+      <td>202</td>
+      <td>417</td>
+      <td>https://i.ytimg.com/vi/teXaL6GdQRk/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Contenu commandité par Netflix France.\nInspiré de Dads Jokes (All Def Digital) et Jokes de Papa (GaboomFilms).\n\nChose étrange pour Guiz et Laurent d'affronter les teens de Stranger Things – Charlie Heaton, Natalia Dyer et Joe Keery – dans un Jokes de Papa en marge de la Paris Games Week. Quelle équipe craquera sous la pression face à des blagues aussi nulles?\n\nSaison 2 de Stranger Things :\n▶ https://youtube.com/watch?v=JSQToYeeR4E\n\nDad Jokes de All Def Digital :\n▶ https://youtube.com/AllDefDigital\n\nJokes de Papa de GaboomFilms :\n▶ https://youtube.com/playlist?list=PLKVHXumEUNS53qA3_GkAlR9eMsHkMfsek\n\nNOTRE BOUTIQUE : http://society6.com/jeuserieux\nFACEBOOK : http://facebook.com/jeuserieux\nABONNEZ-VOUS : http://bit.ly/jeuserieux</td>
+    </tr>
+    <tr>
+      <td>0kErOtN3q_w</td>
+      <td>17.14.11</td>
+      <td>WOW NAPAKAHUSAY ! DUTERTE AT TRUMP NAPAHANGA SA MGA BIGATING SINGING ARTIST KUMANTA SA 31st ASEAN</td>
+      <td>DUTERTE NEWS REPORT</td>
+      <td>25</td>
+      <td>2017-11-12T14:58:51.000Z</td>
+      <td>Duterte News Report|"Philippines News Cast"|"Trending News Cast"|"Philippines Politics"|"Viral News Cast"|"PH News"|"Duterte News Cast"|"Balita Pilipinas"|"Balita News Cast"|"Philippine News Politics"|"President Rody Rodrigo Duterte"|"WOW NAPAKAHUSAY"|"BIGATING MGA SINGING ARTIST KUMANTA"|"31st ASEAN SUMMIT 2017"|"DUTERTE AT TRUMP NAPAHANGA"</td>
+      <td>234983</td>
+      <td>2358</td>
+      <td>125</td>
+      <td>344</td>
+      <td>https://i.ytimg.com/vi/0kErOtN3q_w/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>WOW NAPAKAHUSAY ! DUTERTE AT TRUMP NAPAHANGA SA MGA BIGATING SINGING ARTIST KUMANTA SA 31st ASEAN SUMMIT 2017\n\nPLEASE VISIT ➡ http://bit.ly/DuterteNewsReport\nFB ➡ http://facebook.com/Pres.RodyDuterte\nTwitter ➡ https://twitter.com/DuterteNewsCast\nGoogle+ ➡ http://plus.google.com/114099669253607137181\n\nDISCLAIMER:\n(NO COPYRIGHT INTENTIONS, FOR SUPPORT AND EDUCATIONAL PURPOSES ONLY)</td>
+    </tr>
+    <tr>
+      <td>TaTleo4cOs8</td>
+      <td>17.14.11</td>
+      <td>SHOPPING FOR NEW FISH!!!</td>
+      <td>The king of DIY</td>
+      <td>15</td>
+      <td>2017-11-12T18:30:01.000Z</td>
+      <td>shopping for new fish|"new fish"|"aquarium fish"|"aquarium"|"uarujoey"|"king of diy"|"aquarium gallery"|"the king of diy"|"fish tank"|"fish (animal)"|"diy king"|"arowana"|"flower horn"|"fish"</td>
+      <td>207532</td>
+      <td>7473</td>
+      <td>246</td>
+      <td>2120</td>
+      <td>https://i.ytimg.com/vi/TaTleo4cOs8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Today we go shopping for new fish for some of the aquariums. I wanted to find some asian type fish for the new asian based aquarium... but had no luck. I did however find other fish i just had to have... of course. lol\n\nDetails of store and buying tickets:\n\nBuy tickets in store:\n75 Macdonald Ave\nDartmouth, Nova Scotia\nOR\nCall to buy: \n1 - (902) - 446-3474\nOR buy online here: https://goo.gl/4BaMqb\n\nTickets are $10 each\nDraw will be Dec 3rd by Jeff in store(store owner) \n\n3rd will get a $200 store voucher \n2nd will get a $300 store voucher \n1st will get a 1/2 day trip to the King of DIY Gallery and dinner. \nWinner will be picked up by Jeff at the store. Date of tour will likely be the following Friday or Saturday. \n\nSUBSCRIBE ► https://goo.gl/xjOm50\nGet the ultimate DIY book ►  http://thekingofdiy.com\nLIMITED EDITION SHIRTS!! ► https://goo.gl/E2l6tk\nFacebook ► http://facebook.com/uarujoey\nInstagram ► https://www.instagram.com/uarujoey/\n\nThe king of DIY aquarium projects, education and inspiration!\n\nJoin me each SUNDAY, TUESDAY AND THURSDAY for a new aquarium related video!\n\nMAIL TO:\nPO BOX 25054\nTruro, NS\nB2N 7B8\nCanada\n\nHow to build aquariums: https://goo.gl/gu3CsK\nHow to build aquarium filters: https://goo.gl/cw0Jl9\nHow to build aquarium stands: https://goo.gl/9JB9jo\nHow to build aquarium equipment: https://goo.gl/BHkT2s\nHow to build aquarium lighting: https://goo.gl/Wg4kt0\nHow to build aquarium decorations: https://goo.gl/crQkeT\nVarius aquarium tutorials: https://goo.gl/BKCb3a\nALL Thursday videos: https://goo.gl/DPHjEM\nALL Sunday videos: https://goo.gl/Rn0wmS\n\n\nMy aquarium pumps, circulation and lights are by: http://ecotechmarine.com\nMy aquarium racks and the aquariums within them were made by: http://customaquariums.com</td>
+    </tr>
+    <tr>
+      <td>MLQLOOUO84Y</td>
+      <td>17.14.11</td>
+      <td>《猎场》第15、16、17、18集最全预告集合：夏部长下马，罗伊人投靠郑秋冬。郑秋冬熊青春办结婚证</td>
+      <td>Hong mei li</td>
+      <td>24</td>
+      <td>2017-11-13T16:23:39.000Z</td>
+      <td>热播剧、剧透、预告、胡歌、陈龙、孙红雷、张嘉译、祖峰、胡兵、菅纫姿、万茜、郑秋冬、刘量体、林拜、曲闽京、熊青春、獵場、Game|"Of"|"Hunting"|"、孫紅雷、張嘉譯"</td>
+      <td>25863</td>
+      <td>32</td>
+      <td>3</td>
+      <td>13</td>
+      <td>https://i.ytimg.com/vi/MLQLOOUO84Y/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>《猎场》官方播放頻道欢迎大家订阅观看大剧独播 ：https://www.youtube.com/channel/UCNORTw_uosRNGgdEjwdHvuw\n点击观看播放列表：https://www.youtube.com/playlist?list=PLkvG4EWPDB0mKweR_WQL6E-jaBmAQ0Qzf\n\n本频道无意侵权版权※ 如有侵犯请来信告之【立即秒删】\n专注搜集中国大陆热播剧【剧透、花絮、新闻】\n秒速更新【下集预告】※ 追剧无忧※欢迎订阅</td>
+    </tr>
+    <tr>
+      <td>9B-q8h31Bpk</td>
+      <td>17.14.11</td>
+      <td>John Oliver Tackles Louis C.K. And Donald Trump In Season Finale Featuring Tom Hanks</td>
+      <td>TV Shows</td>
+      <td>22</td>
+      <td>2017-11-13T04:49:26.000Z</td>
+      <td>[none]</td>
+      <td>106029</td>
+      <td>1270</td>
+      <td>101</td>
+      <td>181</td>
+      <td>https://i.ytimg.com/vi/9B-q8h31Bpk/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>John Oliver on News, Politics ...</td>
+    </tr>
+    <tr>
+      <td>hW2B_GT3b1E</td>
+      <td>17.14.11</td>
+      <td>How green delegates keep warm at UN Climate Change Conference</td>
+      <td>Rebel Media</td>
+      <td>25</td>
+      <td>2017-11-13T11:21:32.000Z</td>
+      <td>news|"Rebel Media"|"RebelMedia"|"UN"|"Climate Change Conference"|"COP23"|"fossil fuels"|"green"|"global warming"</td>
+      <td>11636</td>
+      <td>1375</td>
+      <td>20</td>
+      <td>281</td>
+      <td>https://i.ytimg.com/vi/hW2B_GT3b1E/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Sheila Gunn Reid of TheRebel.media: While UN Climate Change Conference delegates are deciding how to make you cut back on fossil fuels, they're keeping warm like this... http://www.RebelUN.com\nPS: Get EARLY access to Sheila Gunn Reid's reports, PLUS shows hosted by Tommy Robinson, Ezra Levant and MORE when you JOIN: http://www.TheRebel.media/Shows\n\n***\nCredits:\n\nCircus Waltz - Silent Film Light by Kevin MacLeod is licensed under a Creative Commons Attribution license (https://creativecommons.org/licenses/by/4.0/)\n\nSource: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100291\n\nArtist: http://incompetech.com/</td>
+    </tr>
+    <tr>
+      <td>0PkVodF5QQ8</td>
+      <td>17.14.11</td>
+      <td>Valérie Plante, la première mairesse de Montréal à Tout Le Monde En Parle TLMEP</td>
+      <td>mart lat</td>
+      <td>24</td>
+      <td>2017-11-13T02:17:01.000Z</td>
+      <td>Valérie Plante|"mairesse"|"Montréal"|"Tout Le Monde En Parle"|"tlmep"|"maire"</td>
+      <td>9368</td>
+      <td>75</td>
+      <td>15</td>
+      <td>28</td>
+      <td>https://i.ytimg.com/vi/0PkVodF5QQ8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>La première mairesse de Montréal, Valérie Plante, n’a pas que son sourire comme atout pour faire de Montréal une ville à échelle humaine. Pour l’élue, qui a fait campagne avec des idées progressistes sur la mobilité, le transport et la décentralisation des pouvoirs, cette élection démontre que les Montréalais ont à cœur leur milieu de vie. Même s’il n’y a pas de révolution qui se dessine, l’Hôtel de Ville verra arriver des idées neuves et un nouveau dialogue avec les citoyens, tandis que le centre-ville pourra dire adieu à la course de formule E…</td>
+    </tr>
+    <tr>
+      <td>objBBRAurLg</td>
+      <td>17.14.11</td>
+      <td>KUWTK | Khloe &amp; Kourtney Kardashian Workout Hungover | E!</td>
+      <td>E! Entertainment</td>
+      <td>24</td>
+      <td>2017-11-13T05:59:48.000Z</td>
+      <td>Kourtney Kardashian|"Khloe Kardashian"|"Kardashians"|"New Season"|"Kim Kardashian"|"E! Entertainment Schedule"|"Celebrity"|"Celeb Gossip"|"Celeb News"|"E! News"|"E! News Now"|"Chelsea Handler"|"The Soup"|"Celebrity News"|"Celebrity Pictures"|"Gossip"|"Giuliana Rancic"|"Chelsea Lately"|"Comedians"|"Comedy"|"Kanye West"|"Scott Disick"|"Keeping Up with the Kardashians"|"Kardashian"|"KUWTK"|"family"|"Kendall Jenner"|"Kylie Jenner"|"Khloe &amp; Kourtney Kardashian"</td>
+      <td>146900</td>
+      <td>1377</td>
+      <td>52</td>
+      <td>128</td>
+      <td>https://i.ytimg.com/vi/objBBRAurLg/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>After a long night of partying, the Keeping Up With the Kardashians still attempt to break a sweat! Watch in this deleted scene.\n\nSUBSCRIBE: http://bit.ly/Eentsub\n\nAbout Keeping Up With the Kardashians:\nThings change, but this famous family stays the same. Can you keep up with the drama?\n\nConnect with the Kardashians:\nVisit the KUWTK WEBSITE: http://bit.ly/KUWTKweb\nLike KUWTK on FACEBOOK: http://bit.ly/KUWTKfb \nFollow KUWTK on TWITTER: http://bit.ly/KUWTKtwtr \n\nAbout E! Entertainment:\nE! is on the Pulse of Pop Culture, bringing fans the very best original content including reality series, scripted programming, exclusive specials, breaking entertainment news, streaming events and more. Passionate viewers can’t get enough of our Pop Culture hits including Keeping Up with the Kardashians,” “Fashion Police,” “The Royals,” Total Divas” and “Botched.” And with new original programming on the way, fans have even more to love.\n\nConnect with E! Entertainment:\nVisit the E! WEBSITE: http://eonli.ne/1iX6d8n\nLike E! on FACEBOOK: http://on.fb.me/1fzeamg\nCheck out E! on INSTAGRAM: http://bit.ly/EInsta\nFollow E! on TWITTER: http://bit.ly/EEntTwitter\n\nKUWTK | Khloe &amp; Kourtney Kardashian Workout Hungover | E!\nhttp://www.youtube.com/user/Eentertainment</td>
+    </tr>
+    <tr>
+      <td>xfmqmmBTRXw</td>
+      <td>17.14.11</td>
+      <td>24 Oras November 13 2017</td>
+      <td>24 Oras News Today</td>
+      <td>22</td>
+      <td>2017-11-12T19:00:07.000Z</td>
+      <td>24 Oras November 13 2017|"24 Oras"|"24 Oras News Today"|"24 Oras November 13"</td>
+      <td>137210</td>
+      <td>381</td>
+      <td>105</td>
+      <td>156</td>
+      <td>https://i.ytimg.com/vi/xfmqmmBTRXw/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>24 Oras November 13 2017.</td>
+    </tr>
+    <tr>
+      <td>PV8maMvPqhw</td>
+      <td>17.14.11</td>
+      <td>AMAZING Street Food  in CHINA | RARELY SEEN Street Food ADVENTURE TRAVEL VLOG 2017</td>
+      <td>The Food Ranger</td>
+      <td>19</td>
+      <td>2017-11-11T17:00:03.000Z</td>
+      <td>the food ranger|"trevor james"|"food ranger"|"food"|"street food"|"street food around the world"|"chinese food"|"chinese street food"|"china"|"china street food"|"street food china"|"china food"|"street"|"best"|"best street food"|"asian"|"try"|"street food videos"|"2017"|"around the world"|"food street"|"noodles"|"cooking"|"travel"|"cheap"|"world"|"chinese"|"street food in china"|"spicy"|"restaurant"|"tour"|"chinese cooking"|"recipe"|"breakfast"|"中国菜"|"street food 2017"|"street food chinese"|"vlog"|"food in china"|"cuisine"|"deep"</td>
+      <td>325851</td>
+      <td>8998</td>
+      <td>185</td>
+      <td>1272</td>
+      <td>https://i.ytimg.com/vi/PV8maMvPqhw/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>STREET FOOD - CHINESE STREET FOOD - STREET FOOD IN CHINA\nTraveling for street food in China and Chinese cuisine is always amazing! We traveled DEEP in Yunnan for amazing street food and to make this street food vlog in 2017! This is some of the best street food around the world! Here in Yunnan, on the ancient tea horse road in Shaxi, you can find some incredible street food delicacies.\n\nFirst off, we started bright and early for some amazing breakfast street food in China. We adventured onto the street to make this street food video and found some of the BEST snacks from the Yi and bai people of Yunnan, China. This truly is some of the most UNIQUE street food in China, starting out right away with BREAKFAST! The local street food recipes were incredible!\n\nWe tasted a few amazing dishes, bright and early!\n\nFirst up, for breakfast, we found a lady selling this incredible milk cheese, kind of like curdled milk, right on the street. You can eat it plain or you can order it fried for breakfast with a lot of sugar. We ended up trying both. \n\nThen, we walked down the street and had a nice and hearty and healthy lunch soup, and rice as well. Super tasty and delicious!\n\nThen we went for a walk and found some street huajuan rolls stuffed with fermented tofu, very strong and pungent!\n\nAll of this was found during the weekly farmers market on the street in Shaxi every friday! If you come to Yunnan in Southern China, come to Shaxi on a friday to visit one of the most amazing street markets! You have to come check it out!\n\nAfter that, we went for a lunch and tasted classic bai cuisine, including local Matsutake mushrooms and amazing salted pork, which kind of tasted like pastrami! So delicious!!\n\nABOUT THE FOOD RANGER\n-----------------------------------------------------------------------------------------\nMy name is Trevor James and I'm a hungry traveler and Mandarin learner that's currently living in Chengdu, Szechuan, China, eating up as much delicious .\n\nI enjoy tasting and documenting as many dishes as I can and I'm going to make videos for YOU along the way! Over the next few years, I'm going to travel around the world and document as much food as I can for you! I love delicious food! This channel will show you real Chinese food and real local food, not that stuff they serve in the Buzzfeed challenge.\n\nThanks for watching, and please feel free to leave a comment, suggestion, or critique in the comments below!\n\nPlease make sure to subscribe, it's the best way to keep my videos in your feed, and give me a thumbs up too if you liked this food video, thanks, I appreciate it! You could also share the video too if you liked it, that would be awesome.\n-----------------------------------------------------------------------------------------\nFacebook: https://www.facebook.com/thefoodranger\nTwitter: https://twitter.com/FoodRanger\nInsta: https://instagram.com/thefoodranger</td>
+    </tr>
+    <tr>
+      <td>3zjhB7NYQyg</td>
+      <td>17.14.11</td>
+      <td>Let's Play - Civic Doodle with Tim Gettys</td>
+      <td>LetsPlay</td>
+      <td>20</td>
+      <td>2017-11-11T15:00:00.000Z</td>
+      <td>Achievement Hunter|"AH"|"video game"|"gaming"|"game"|"gameplay"|"game play"|"lets play"|"let's play"|"multiplayer"|"Gavin Free"|"Michael Jones"|"Jack Pattillo"|"Jeremy Dooley"|"Lindsay Jones"|"Tim Gettys"|"Kinda Funny"|"Civic Doodle"|"Drawing Game"|"Jack Box Game"|"Party Game"|"Jackbox party pack 4"|"Jackbox party games"|"civic doodle"|"funny drawings"</td>
+      <td>274190</td>
+      <td>6303</td>
+      <td>266</td>
+      <td>368</td>
+      <td>https://i.ytimg.com/vi/3zjhB7NYQyg/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>It's time to see who can doodle their way to the top with Kinda Funny's Tim Gettys. \n\n» Join FIRST to watch episodes early: http://bit.ly/2vv4OWI\n» Get your Let's Play merch: http://bit.ly/2vJi7yQ\n» Subscribe: http://bit.ly/1BuRgl1\n\nAbout Let's Play:\nA revolving cast of Rooster Teeth employees play video games extremely poorly.\n\nMore from Let's Play:\n» Achievement Hunter: http://bit.ly/AHYTChannel\n\nhttps://www.youtube.com/user/letsplay</td>
+    </tr>
+    <tr>
+      <td>F5mzb086QM8</td>
+      <td>17.14.11</td>
+      <td>Secrets of Dairy: Larson Dairy Farm</td>
+      <td>The Secrets of Dairy</td>
+      <td>22</td>
+      <td>2017-11-09T22:15:58.000Z</td>
+      <td>secrets of dairy|"larson dairy farms"|"publix"|"plant based"</td>
+      <td>29234</td>
+      <td>37</td>
+      <td>65</td>
+      <td>62</td>
+      <td>https://i.ytimg.com/vi/F5mzb086QM8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>In August of 2017, undercover investigations were conducted at the Larson dairy farm, located in Ockochobee (Florida). The research unveiled the dark secrets behind the doors of the dairy industry. What was revealed, shocked even the most seasoned researchers, and confirmed rumours that the Larson dairy farm is considered to be the most brutal operations of all of the dairy farms in Florida.</td>
+    </tr>
+    <tr>
+      <td>TIvI07xLPnA</td>
+      <td>17.14.11</td>
+      <td>The National for Sunday, November 12, 2017</td>
+      <td>The National</td>
+      <td>25</td>
+      <td>2017-11-13T03:06:10.000Z</td>
+      <td>Canada|"CBC"|"CBC News"|"National"|"News"|"The National"|"World"</td>
+      <td>13433</td>
+      <td>74</td>
+      <td>57</td>
+      <td>0</td>
+      <td>https://i.ytimg.com/vi/TIvI07xLPnA/default.jpg</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Welcome to The National, the flagship nightly newscast of CBC News\n\n»»» Subscribe to The National to watch more videos here:   https://www.youtube.com/user/CBCTheNational?sub_confirmation=1\n\nVoice Your Opinion &amp; Connect With Us Online:\n\nThe National Updates on Facebook: https://www.facebook.com/thenational\nThe National Updates on Twitter: https://twitter.com/CBCTheNational\n»»» »»» »»» »»» »»» \nThe National is CBC Television's flagship news program. Airing six days a week, the show delivers news, feature documentaries  and analysis from some of Canada's leading journalists.</td>
+    </tr>
+    <tr>
+      <td>RbcGCMtlluQ</td>
+      <td>17.14.11</td>
+      <td>Final Nail In The Coffin: SNL Turns Against The Clinton Crime Machine</td>
+      <td>The Alex Jones Channel</td>
+      <td>25</td>
+      <td>2017-11-13T05:46:39.000Z</td>
+      <td>Alex Jones Infowars|"Infowars.com"|"News Wars"|"Truth"|"Alternative Media"</td>
+      <td>116344</td>
+      <td>5068</td>
+      <td>106</td>
+      <td>1341</td>
+      <td>https://i.ytimg.com/vi/RbcGCMtlluQ/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Alex Jones and Darrin McBreen talk about how even SNL are turning their backs on Hillary and old democrats.\nCLICK BELOW FOR FULL STORY.....\nhttps://www.infowars.com/snl-rips-dems-as-elderly-out-of-touch-losers/\nHelp us spread the word about the liberty movement, we're reaching millions help us reach millions more. Share the free live video feed link with your friends &amp; family: http://www.infowars.com/show\n\nFollow Alex on TWITTER - https://twitter.com/RealAlexJones\nLike Alex on FACEBOOK - https://www.facebook.com/AlexanderEmerickJones\nInfowars on G+ - https://plus.google.com/+infowars/\n\n:Web:\nhttp://www.infowars.com/\nhttp://www.prisonplanet.com/\nhttp://www.infowars.net/\n\n:Subscribe and share your login with 20 friends:\nhttp://www.prisonplanet.tv \nhttp://www.InfowarsNews.com\n\nFunding the Infowar is more important than ever! \nVisit http://infowarsStore.com to get the latest books, documentaries, Infowars swag, survival &amp; preparedness gear &amp; nutritional products Alex Jones and his family trust, while supporting the growth of our expanding media operation.  \n\n\nSign up for the Infowars daily newsletter to become an 'Underground Insider' &amp; bypass censorship bots of social media plus get exclusive content + coupon codes for our shop! http://www.infowars.com/newsletter\n\n\nINFOWARS HEALTH - START GETTING HEALTHY BEFORE IT'S TOO LATE - http://www.infowarshealth.com/\n\n\nThe Alex Jones Show ©copyright, Free Speech Systems.LLC 1995 - 2017 All Rights Reserved. May use for fair use and educational purposes\n\n#AlexJones #Infowars</td>
+    </tr>
+    <tr>
+      <td>CpU72eM8vCo</td>
+      <td>17.14.11</td>
+      <td>Operation: Dry Tank</td>
+      <td>Hamish &amp; Andy</td>
+      <td>23</td>
+      <td>2017-11-13T07:13:54.000Z</td>
+      <td>hamish blake|"andy lee"|"hamish"|"andy"</td>
+      <td>56077</td>
+      <td>1713</td>
+      <td>45</td>
+      <td>127</td>
+      <td>https://i.ytimg.com/vi/CpU72eM8vCo/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>It was a peculiar experiment, but someone had to do it...</td>
+    </tr>
+    <tr>
+      <td>pXEGYQ3DNug</td>
+      <td>17.14.11</td>
+      <td>Crime Patrol Dial 100 - क्राइम पेट्रोल - Ep 650 - Full Episode - 10th November, 2017</td>
+      <td>SET India</td>
+      <td>24</td>
+      <td>2017-11-12T15:34:31.000Z</td>
+      <td>true events|"sony entertainment channel"|"conspiracy"|"set"|"tv serial"|"crime patrol"|"crime patrol diall 100"|"drama"|"anup soni"|"affair"|"police"|"crimes against women"|"sony tv"|"investigation"|"india"|"murder case"|"indian television"|"anoop soni"|"murder"|"crimes in india"|"crime patrol latest episode"|"hindi crime serials"|"sony liv"|"crime"|"dial 100"|"setindia"|"india crime"|"Crimes Against Children"|"child trafficking"|"IPC section"|"maharashtra police"|"mumbai murder case"|"mumbai police"</td>
+      <td>210478</td>
+      <td>905</td>
+      <td>176</td>
+      <td>85</td>
+      <td>https://i.ytimg.com/vi/pXEGYQ3DNug/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Click here to subscribe to SonyLIV  : http://www.sonyliv.com/signin\n\nClick here to watch full episodes of Crime Patrol Dial 100:  http://www.sonyliv.com/details/show/4682167166001/Crime-Patrol-Dial-100\n\nMore Useful Links :\nAlso get Sony LIV app on your mobile\nGoogle Play - https://play.google.com/store/apps/details?id=com.msmpl.livsportsphone\nITunes - https://itunes.apple.com/us/app/liv-sports/id879341352?ls=1&amp;mt=8\nVisit us at : http://www.sonyliv.com\nLike us on Facebook : http://www.facebook.com/SonyLIV\nFollow us on Twitter : http://www.twitter.com/SonyLIV\n\nEpisode 650:\n--------------------\nThe police find that Ratna and Nandu were murdered in a similar fashion. During the investigation the police find that Ashok and Swati wanted to run away from their families and settle down. Meanwhile, the police learn that Pradeep is being beaten up by the villagers. The villagers claim that Pradeep poisoned the water well. While the police manage to save Pradeep that day, a few days later he is found murdered. Who has killed Pradeep? Watch this episode to find out.\n\nAbout Crime Patrol - Dial 100: \n----------------------------------------------------\nCrime Patrol - Dial 100 will attempt to look at the signs, the signals that are always there before these mindless crimes are committed. Instincts/Feelings/Signals that so often tell us that not everything is normal. May be, that signal/feeling/instinct is just not enough to believe it could result in a crime. Unfortunately after the crime is committed, those same signals come haunting.</td>
+    </tr>
+    <tr>
+      <td>WuzMMgFsJFE</td>
+      <td>17.14.11</td>
+      <td>McElhinney shines in Leafs' 4-1 win over the Bruins</td>
+      <td>NHL</td>
+      <td>17</td>
+      <td>2017-11-12T04:20:25.000Z</td>
+      <td>sp:ti:home=BOS|"sp:ti:away=TOR"|"sp:dt=2017-11-12T00:00:00Z"|"sp:vl=en-US"|"sp:st=icehockey"|"sp:li=NHL"|"sp:ty=high"</td>
+      <td>33167</td>
+      <td>304</td>
+      <td>11</td>
+      <td>71</td>
+      <td>https://i.ytimg.com/vi/WuzMMgFsJFE/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Curtis McElhinney made 38 saves and Mitch Marner recorded a goal and an assist in the Maple Leafs' 4-1 victory against the Bruins</td>
+    </tr>
+    <tr>
+      <td>1UE5Dq1rvUA</td>
+      <td>17.14.11</td>
+      <td>Taylor Swift Perform Ready For It - SNL</td>
+      <td>Ken Reactz</td>
+      <td>24</td>
+      <td>2017-11-12T05:18:02.000Z</td>
+      <td>[none]</td>
+      <td>320964</td>
+      <td>8069</td>
+      <td>285</td>
+      <td>717</td>
+      <td>https://i.ytimg.com/vi/1UE5Dq1rvUA/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Thanks for watching please subscribe and subscribe like this video\n\nFollow me on ig @fuego_ken</td>
+    </tr>
+    <tr>
+      <td>2B8RO0GcLDw</td>
+      <td>17.14.11</td>
+      <td>Live with Dr.Shahid Masood | Asif Zardari | NawazSharif | MQM | 12-November-2017</td>
+      <td>NewsOne Pk</td>
+      <td>25</td>
+      <td>2017-11-12T16:23:14.000Z</td>
+      <td>ShahidMasood|"DrShahidMasood"|"LiveShow"|"TalkShow"|"Political Show"|"Politics"|"Program"|"Updates"|"Gossips"|"PMLN"|"PTI"|"PPP"|"JI"|"NawazShaif"|"IshaqDar"|"NAB"|"AsifAliZardari"|"ShehbazSharif"|"MQMLondon"|"MQMPakistan"|"Pakistan"|"News"|"CurrentAffairs"|"Dhabardoos"|"Operation Dhabardoos"|"ISPR"|"PakArmy"|"Rangers"|"Sindh"|"Punjab"|"Islamabad"|"Information"|"BREAKING"</td>
+      <td>187075</td>
+      <td>2443</td>
+      <td>185</td>
+      <td>324</td>
+      <td>https://i.ytimg.com/vi/2B8RO0GcLDw/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>NewsONE delivers the Latest Updates, Headlines, Breaking News and Information on the latest top stories from Pakistan and around the World. (weather, business, entertainment, politics, sports and more)\n\nSubscribe us\n\nWebsite: www.newsone.tv\nNews Alerts: www.twitter.com/newsonepk\nNews Updates: www.facebook.com/newsonepk\nFollow us: www.instagram.com/newsonepakistan\nSubscribe us on Youtube and Google+: Newsonepk</td>
+    </tr>
+    <tr>
+      <td>Y4BoKJaLaTs</td>
+      <td>17.14.11</td>
+      <td>ABS-CBN Christmas Station ID 2017 “Just Love Ngayong Christmas”</td>
+      <td>ABS-CBN Entertainment</td>
+      <td>24</td>
+      <td>2017-11-13T11:39:04.000Z</td>
+      <td>ABS-CBN|"ABS-CBN Online"|"Philippines"|"Entertainment"|"Christmas Station ID"|"SID"|"Recording"|"Station ID"|"Christmas Music (Musical Genre)"|"christmas songs"|"ABS-CBN Christmas Station ID"|"#JustLOVE"|"Just Love"|"Piolo Pascual"|"Sarah Geronimo"|"Toni Gonzaga"|"Yeng Constantino"|"Xmas"|"Darren Espanto"|"Boyband PH"|"Angeline Quinto"|"Kyla"|"Daryl Ong"|"Jason Dy"|"KZ Tandingan"|"Zia Quizon"|"Moira Dela Torre"|"Ella Nympha"|"Xia Vigor"|"November 13 2017"|"20171113online"</td>
+      <td>281350</td>
+      <td>17626</td>
+      <td>230</td>
+      <td>3352</td>
+      <td>https://i.ytimg.com/vi/Y4BoKJaLaTs/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>ABS-CBN Christmas Station ID 2017 “Just Love Ngayong Christmas”\n \nLove is the force that connects families across the world. Filipinos are known for being a loving people. We solve conflicts with compassion, respect our differences, heal pain with kindness, comfort each other during difficult times and possess a strong grip on our faith.\nThis Christmas, we celebrate these admirable Filipino traits. By gathering images and videos that went viral online, we focus the spotlight on individuals and organizations with inspiring stories.\n#JustLove, ABS-CBN’s new theme, is the hymn of our collective voices, stories and dreams for our family and our country.\n\nCredits:\nABS-CBN Christmas Station ID 2017 was created by ABS-CBN Creative Communications Management Division headed by Robert Labayen, Johnny Delos Santos and Patrick de Leon. It is directed by Paolo Ramos with second unit directors Peewee Azarcon Gonzales and Lorenz Roi Morales. The message of love comes from the words written by Robert Labayen, Lloyd Oliver Corpuz and Christian Faustino. The moving melody was composed by Jimmy Antiporda.\n\nIts powerful lineup of singers includes Sarah Geronimo, Gary Valenciano, Martin Nievera, Piolo Pascual, Toni Gonzaga, Ogie Alcasid, Erik Santos, Zsa Zsa Padilla, Billy Crawford, Yeng Constantino, Darren Espanto, Boyband PH, Morissette Amon, Angeline Quinto, Klarisse, Jona, Kyla, Daryl Ong, Jason Dy, KZ Tandingan, Jambayan members Inigo Pascual, Zia Quizon, Moira Dela Torre, Kaye Cal, Migz Haleca, and Isabela Vinzon, Jeremy Glinoga, Mica Becerro, and Jona Marie Soquite of The Voice Teens, Ella Nympha and Xia Vigor of Your Face Sounds Familiar Kids, John Clyd Talili of Tawag ng Tanghalan, and Angel of Little Big Shots.\n \nThe 2017 SID Creative and Production Team members are Sheryl B. Ramos, Christian Faustino, Christine Joy Laxamana, Love Rose De Leon, Mark Raywin Tome, Leeroy Lim, Angela Suarez, Djoanna San Jose, Sebb Turgo, Regine Binuya, Shally Tablada, Christian Paul Santos, Jaco Joves, Martin Vargas, Dang F. Baldonado, Edsel Misenas, Kathrina Sanchez, Adrian Lim, Lota I. Rosales, Chiz Constantino-Perez, Edward Ramirez, Mark Bravo, Christer John Salire, Christine Daria-Estabillo, Karen Adiova, Stephanie Angeles, Christian Abuel, Lawrence Sibug, Elai Blando, Harvey Dela Cruz with ABS-CBN Integrated Marketing Head, Nandy Villar, Corporate Marketing Head, Christian Wong, Corporate Marketing Manager, June Gerard Maralit and Corporate Marketing Specialist, Jennifer Bautista. The SID Team partnered with ABS-CBN TV Entertainment, ABS-CBN News, ABS-CBN Regional, ABS-CBN Sports and Action, ABS-CBN Digital Terrestrial Television, ABS-CBN Digital Media Division, ABS-CBN Licensing, ABS-CBN Star Magic, ABS-CBN Property Management, ABS-CBN Global, ABS-CBN Safety and Security, ABS-CBN Lingkod Kapamilya Foundation, Inc., ABS-CBN HR Division, ABS-CBN Corporate Communications, Other members are Tess Perez-Mendoza and Aye Duñgo, Traffic &amp; Operations; Jaime Porca, Technical Production Head; Ralph Francisco, TOD Technical Producer; Sam Esquillon, Production Designer; Hannah Abdul, Art Director; Oliver Paler, Dennis Amarille, Alfie Landayan, Meryl Pacis, Maria Concepcion Ignacio-Salire, Mark Gonzales, Sebb Turgo, Jasper Herrera, Raphael dela Rea, Karlo Victoriano, Joseph Linga, Shane Ibanez, Teters Enrique, Post Production Team; Andrei Antonio, Mark Antonio, Karl Montenegro and Joseph delos Reyes, Videographers; Regine Binuya, Aileen Gooco and Isha Rosabal, Photographers; Rochelle Tan and Hilda Torres Print Graphic Designers; Arnold Sulit, Location Manager;  Jesusa Canilang, Chelly Coching and Salve Penalosa, Production Coordinators; Carlo Frances Luayon, Researcher.\n\nWe would like to thank Dir. Laman M. Piang of the Bureau of Muslim Cultural Affairs, Ramah Dan Aguam, Aleem Mohammad Cana, Basher Tomilang, Mosmar Mamad and Rueda E. Usman for helping us share the admirable spirit and love of our Muslim brothers.\n\nWe also give credit to the following people for sharing their stories of love in the internet: Jerremie Villanueva, Mar Cheri D. Galvez, Aizel Arellano Maulion, Amer Riga, JJ Villanueva, Modern Nanays of Mindanao/Nadine Angelica G. Casino, Jerven Recaplaza Anding, Francis Zion B. Jerusalem, Louise Suarez, P01 Jeoffry Galasgas, Herlyn Orilla, Adrianne and Jason Stewart, Desiree Mantalaba and Ronadel Bedia.\n\nGet your official #justLOVE t-shirts exclusively on http://bit.ly/2mgnyFb\n\nSubscribe to ABS-CBN Entertainment channel! - http://bit.ly/ABS-CBNEntertainment\n\nVisit our official website! \nhttp://entertainment.abs-cbn.com/tv/shows/magandangbuhay/main\nhttp://www.push.com.ph\n\nFacebook: http://www.facebook.com/ABSCBNnetwork\n\nTwitter: \nhttps://twitter.com/ABSCBN \nhttps://twitter.com/abscbndotcom\nInstagram: http://instagram.com/abscbnonline</td>
+    </tr>
+    <tr>
+      <td>MBjVXkS-vuY</td>
+      <td>17.14.11</td>
+      <td>Last Video of Hashtag Franco Before He Died</td>
+      <td>BOOMPANOT.COM</td>
+      <td>22</td>
+      <td>2017-11-12T03:17:48.000Z</td>
+      <td>Hashtag franco|"Franco Hernandez"</td>
+      <td>1300826</td>
+      <td>3333</td>
+      <td>490</td>
+      <td>494</td>
+      <td>https://i.ytimg.com/vi/MBjVXkS-vuY/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Gf of Hashtag Franco posted the video of her with his boyfriend before the drowning incident</td>
+    </tr>
+    <tr>
+      <td>SElT590QmTY</td>
+      <td>17.14.11</td>
+      <td>Vikings vs. Redskins | NFL Week 10 Game Highlights</td>
+      <td>NFL</td>
+      <td>17</td>
+      <td>2017-11-12T21:43:35.000Z</td>
+      <td>NFL|"Football"|"offense"|"defense"|"afc"|"nfc"|"American Football"|"highlight"|"highlights"|"game"|"games"|"sport"|"sports"|"action"|"play"|"plays"|"season"|"2017"|"rookie"|"rookies"|"recap"|"run"|"sprint"|"catch"|"huge"|"amazing"|"touchdown"|"td"|"week 9"|"wk 9"|"minnesota"|"vikings"|"washington"|"redskins"|"keenum"|"cousins"|"diggs"|"kelley"|"post game highlights"|"bridgewater"|"sp:dt=2017-11-12T13:00:00-05:00"|"sp:vl=en-US"|"sp:st=football"|"sp:li=nfl"|"sp:ti:home=Was"|"sp:ti:away=Min"|"sp:ty=high"</td>
+      <td>439507</td>
+      <td>2557</td>
+      <td>133</td>
+      <td>1294</td>
+      <td>https://i.ytimg.com/vi/SElT590QmTY/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>The Minnesota Vikings battle the Washington Redskins in Week 10 of the 2017 NFL Season.\n\nWatch full games with NFL Game Pass: https://www.nfl.com/gamepass?campaign=sp-nf-gd-ot-yt-3000342\n\nSign up for Fantasy Football! http://www.nfl.com/fantasyfootball\n\nSubscribe to NFL: http://j.mp/1L0bVBu\n\nThe NFL YouTube channel is your home for immediate in-game highlights from your favorite teams and players, full NFL games, behind the scenes access and more!\n\nCheck out our other channels:\nNFL Network http://www.youtube.com/nflnetwork\nNFL Films http://www.youtube.com/nflfilms\n\nFor all things NFL, visit the league's official website at http://www.nfl.com/\n\nWatch NFL Now: https://www.nfl.com/now\nListen to NFL podcasts: http://www.nfl.com/podcasts\nWatch the NFL network: http://nflnonline.nfl.com/\nDownload the NFL mobile app: https://www.nfl.com/apps\n2017 NFL Schedule: http://www.nfl.com/schedules\nBuy tickets to watch your favorite team:  http://www.nfl.com/tickets\nShop NFL: http://www.nflshop.com/source/bm-nflcom-Header-Shop-Tab\n\nLike us on Facebook: https://www.facebook.com/NFL\nFollow us on Twitter: https://twitter.com/NFL\nFollow us on Instagram: https://instagram.com/nfl/\nFind us on Snapchat</td>
+    </tr>
+    <tr>
+      <td>0aYWB3d7bJ8</td>
+      <td>17.14.11</td>
+      <td>【Full】《极限挑战III》第11期20171110：黄渤魔性PK斗鸡眼 张艺兴罗志祥戏精上身喝毒酒话离别！ Go Fighting S3 EP.11【东方卫视官方高清】</td>
+      <td>SMG上海电视台官方频道 SMG Shanghai TV Official Channel</td>
+      <td>24</td>
+      <td>2017-11-10T17:47:30.000Z</td>
+      <td>极限挑战|"极限挑战 20171110"|"极限挑战20171110"|"20171110 极限挑战"|"极限挑战 1110"|"张艺兴 极限挑战"|"极限挑战 第三季"|"Jixiantiaozhan"|"极限挑战十一期"|"极限挑战11期完整版"|"极限挑战第11期官方高清"|"极限挑战第三季"|"鸡条 第3季"|"极限挑战 第3季"|"极限挑战第3季"|"go fighting!"|"极限挑战 171110"|"极限挑战 第3季 第11期"|"极限挑战 11"|"极限挑战第11期"|"张艺兴罗志祥 戏精"|"极限挑战 第11期"|"gofighting S3"|"鸡条 20171110"|"鸡条 第11期"|"极挑 第11期"|"极挑 11期"|"第11期极限挑战"|"极限挑战 ep11"|"孙红雷 极限挑战"|"鸡条 EP.11"|"极挑 20171110"|"极限挑战官方高清"|"ep11极限挑战"|"gofighting3"|"黄渤 斗鸡眼"|"鸡条 第三季"|"罗志祥 极限挑战"|"黄磊 极限挑战"|"鸡条 十一"|"黄渤 极限挑战"|"王迅 极限挑战"|"鸡条20171110"|"极挑 ep.11"|"极挑20171110"</td>
+      <td>738561</td>
+      <td>2519</td>
+      <td>224</td>
+      <td>1014</td>
+      <td>https://i.ytimg.com/vi/0aYWB3d7bJ8/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>极限挑战Ⅲ 7月9日 诚意回归 不见不散！\n订阅频道看极挑第三季！ http://bit.ly/ShanghaiTV \n鸡条粉丝都在这儿 → https://www.facebook.com/SMGGoFighting\n\n☆最火爆的华语综艺－订阅SMG综艺频道: http://bit.ly/SMGshows\n★最精彩的华语剧集－订阅SMG电视剧频道: http://bit.ly/SMGdrama\n\n【欢迎加入上海东方卫视社交页面参与互动讨论】\n☆Facebook：https://www.facebook.com/smgdragontv\n☆极限挑战FB：https://www.facebook.com/SMGGoFighting\n\n《极限挑战》第一季 超清完整版：http://bit.ly/2rvDbJo\n《极限挑战》第二季 超清完整版：http://bit.ly/2rvO3qE\n\n【极限挑战】7月重磅回归\n《极限挑战》是东方卫视制作的一档大型励志体验真人秀节目，由六位固定成员组成。每一期节目都围绕一个社会热点或时代背景而展开，加入不同嘉宾进行开放式的户外挑战运动，主打“男人帮”概念，主要呈现男人们在各种追逐、竞争当中焕发的魅力与睿智，流血流汗艰难获胜，以此反映男人们的压力和现状。节目采用的“开放式过程”和“开放式结局”，营造完全不同于过去综艺节目模式化的观感，上演12集“剧情式综艺”。\n\n【SMG上海电视台官方频道 - 梦想的力量 你我同在】\n看看新闻网是上海东方传媒集团有限公司（SMG）上海广播电视台­旗下的网络新闻媒体­，是中国专业的视频新闻网站，提供最新最热­的-视频新闻在线播放，24小时视频直播­及海量视频新闻搜索。我们的YouTube频道汇集SMG(上海东方传媒集团有限公­司­)旗下电视频道的内容，包括东方卫视的：极限挑战、欢乐喜剧人、笑傲江湖、花样姐姐、中国达人秀等等。同时，我们的一线记者也会采集娱乐、民生等更多­好玩的视频分享给大­家。所有最新最热门的华语视频，尽在看看新­闻网官方频道！\n\n【SMG 品牌节目】\n★《旅途的花样》Flowers On Trip 超清完整版: http://bit.ly/2uwV7mL\n☆《金星秀》The Jinxing Show 超清完整版：http://bit.ly/2sMAgOL\n★《挑战的法则》Who’s The King超清完整版：http://bit.ly/2rnPw3F\n☆《诗书中华》超清完整版：http://bit.ly/2sSL8G0\n★《今晚80后脱口秀》Tonight 80’s Talk Show 超清完整版：http://bit.ly/2sMsi8k\n☆《生活改造家》超清完整版：http://bit.ly/2tXVMjN\n★《今夜百乐门》超清完整版: http://bit.ly/2oa0x2l\n☆《梦想改造家》 Dream of Decoration 超清完整版：https://goo.gl/LPfnbS\n★《四大名助》超清完整版：https://goo.gl/Iq7vf9\n☆《急诊室的故事2》The Story In ER S2超清完整版：https://goo.gl/JsuLIz\n★《中国式相亲》超清完整版：https://goo.gl/aymTY4\n☆《欢乐喜剧人2》The Comedians S2超清完整版：https://goo.gl/KH1ERZ\n★《花样姐姐2》Sisters Over Flowers超清完整版：https://goo.gl/1JcTWa\n☆《我去上学啦》Go to School 超清完整版：https://goo.gl/vQpuYb\n★《笑傲江湖3》King of Comedy III 超清完整版：https://goo.gl/G1S2Gy\n☆《隐藏的歌手2》Hidden Singer S2超清完整版：https://goo.gl/Lp5u5x\n★《跟着贝尔去冒险》Survivor Games 超清完整版：https://goo.gl/AZWAql\n☆《越野千里》Absolute Wild 超清完整版：https://goo.gl/XE306v</td>
+    </tr>
+    <tr>
+      <td>W-m1930mh1s</td>
+      <td>17.14.11</td>
+      <td>Steam Code how to get FREE and easily</td>
+      <td>turk2doubleoh8</td>
+      <td>22</td>
+      <td>2017-11-10T23:46:35.000Z</td>
+      <td>gift card|"free amazon gift card"|"amazon gift card"|"amazon gift card free"|"free google play gift card"|"free gift card google play"|"xbox gift card"|"gift card holder"|"free amazon gift card codes"|"free google gift card"|"google play gift card"|"gift"|"gift cards"|"free amazon gift cards"|"how to get free gift cards"|"get free gift cards"|"how to get free amazon gift cards"|"free gift cards"|"greeting card"|"handmade birthday card"|"xbox gift cards free"|"card making"</td>
+      <td>56407</td>
+      <td>734</td>
+      <td>136</td>
+      <td>10</td>
+      <td>https://i.ytimg.com/vi/W-m1930mh1s/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Hi guys today i will show you How to get easily and free gift cards like steam, amazon, itunes, google play\n\nfollow the steps in video\n\nlike &amp; Share</td>
+    </tr>
+    <tr>
+      <td>nAvudA4X6vI</td>
+      <td>17.14.11</td>
+      <td>Online Gaming Insults Gone Wild</td>
+      <td>Graham The Christian</td>
+      <td>23</td>
+      <td>2017-11-13T05:29:52.000Z</td>
+      <td>funny|"insults"|"roasts"|"gaming"|"online"|"funniest"</td>
+      <td>378352</td>
+      <td>16566</td>
+      <td>188</td>
+      <td>2803</td>
+      <td>https://i.ytimg.com/vi/nAvudA4X6vI/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Have you ever had a fit of rage playing a game? Ever called the people you're playing with obscene names? Here are some of the funniest iterations of the best insults out there. \n\nCheck some more out for yourself on this hilarious askreddit: https://www.reddit.com/r/AskReddit/comments/727i3p/online_gamers_of_reddit_what_was_the_funniest/\n\nSubscribe Today ► http://bit.ly/2dQBHW9\nDiscord ► https://discordapp.com/invite/Cowbelly\n\nOutro music: [Coming Soon]\n\nTwitter - http://www.twitter.com/CowbellyTV\nInstagram - http://www.Instagram.com/grahamthechristian</td>
+    </tr>
+    <tr>
+      <td>xiS6rSvxl-M</td>
+      <td>17.14.11</td>
+      <td>10 More Famous Men EXPOSED After The Harvey Weinstein Scandal</td>
+      <td>TheTalko</td>
+      <td>24</td>
+      <td>2017-11-10T18:00:09.000Z</td>
+      <td>TheTalko|"Harvey Weinstein"|"Hollywood"|"Scandal"|"Ethan Kath"|"Crystal Castles"|"Oliver Stone"|"Michael Oreskes"|"Kevin Spacey"|"George H.W. Bush"|"Mark Halperin"|"Andy Dick"|"Robert Scoble"|"Jeremy Piven"|"Brett Ratner"|"louis ck"</td>
+      <td>319817</td>
+      <td>1796</td>
+      <td>562</td>
+      <td>1065</td>
+      <td>https://i.ytimg.com/vi/xiS6rSvxl-M/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>The wall of shame of men in Hollywood.\nHablas español? Suscríbete a TheRichest - Español : https://goo.gl/ogE71b\nSubscribe: https://goo.gl/Hnoaw3\n-----------------------------------------------------------------------------------------\nWhen the lid was blown off of the Harvey Weinstein scandal, it was just the tip of the iceberg. As the entertainment industry tried to deal with the aftermath, more and more women stepped forward with their claims against Hollywood’s mega-producer. Soon enough, other famous men in various industries were also accused of heinous acts against other men and women. From Ethan Kath of Crystal Castles, Oliver Stone, Michael Oreskes, and Kevin Spacey, this is 10 More Famous Men EXPOSED After The Harvey Weinstein Scandal.\n\nEven a former U.S. president was accused of acting inappropriately with women. Two different accusers came forward to expose George H.W. Bush for groping them and telling them dirty jokes during public appearances. He didn’t deny the allegations. In fact, he confirmed through his spokesman that he would sometimes touch women on the rear end and tell them inappropriate jokes just for fun.\n\nMany of these men find out the hard way that behaving improperly can cost them their lives and their livelihoods. Actor and comedian Andy Dick was fired from a movie after he licked people on set. And Mark Halperin, a TV political analyst, was terminated by NBC and lost a book and HBO deal after his alleged victims came forward.\n\nIf you’d like to hear about even more about these alleged victims and the famous men who were exposed, including Robert Scoble, Brett Ratner, and actor Jeremy Piven, make sure to watch our video. Let us know in the comments section which of these scandals shocked you the most.\n\n\n-----------------------------------------------------------------------------------------\nOur Social Media:\nFacebook: https://www.facebook.com/TheTalko\nTwitter: https://twitter.com/thetalko\nInstagram: https://instagram.com/the_talko\n\n-----------------------------------------------------------------------------------------\nFor more videos and articles visit:\nhttp://www.thetalko.com/</td>
+    </tr>
+    <tr>
+      <td>kRoCPSDCvts</td>
+      <td>17.14.11</td>
+      <td>【FULL】王俊凯不满章子顶嘴争执火药味十足？ 欧阳娜娜郑昊致敬经典被评演技不太好 《演员的诞生》第3期 20171111 [浙江卫视官方HD]</td>
+      <td>中国浙江卫视官方频道 Zhejiang TV Official Channel - 欢迎订阅 -</td>
+      <td>24</td>
+      <td>2017-11-11T17:34:17.000Z</td>
+      <td>演员的诞生|"演员的诞生 整片"|"演员的诞生 正片"|"演员的诞生 3"|"演员的诞生3"|"演员的诞生第三期"|"演员的诞生 第三期"|"演员的诞生第3期"|"演员的诞生 第3期"|"演员的诞生20171111"|"20171111 演员的诞生"|"王俊凯"|"欧阳娜娜"|"章子怡"|"宋丹丹"|"刘烨"|"张国立"|"郑昊"|"周一围"|"于月仙"|"陈小纭"|"尹正"|"演员的诞生 王俊凯"|"演员的诞生 欧阳娜娜"|"演员的诞生 周一围"|"演员的诞生 章子怡"|"演员的诞生 宋丹丹"|"演员的诞生 刘烨"|"演员的诞生 张国立"|"演员的诞生 郑爽"|"王俊凯 欧阳娜娜"|"章子怡 一代宗师"|"章子怡 电影"|"刘烨 特种兵"|"刘烨电视剧"|"宋丹丹 小品"|"浙江卫视 演员的诞生"|"演员诞生"|"yanyuan的dansheng"|"跑男"|"奔跑吧"|"中国新歌声"|"浙江卫视"</td>
+      <td>469779</td>
+      <td>2560</td>
+      <td>214</td>
+      <td>2084</td>
+      <td>https://i.ytimg.com/vi/kRoCPSDCvts/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>本期看点：王俊凯正面与章子怡互怼争执激烈 欧阳娜娜周一围等为何被导师批评？\n\n◘ 浙江卫视 YouTube：http://bitly.com/zhejiangtv\n◘ 奔跑吧 YouTube：http://bitly.com/runningmanchina\n◘ 浙江音乐 YouTube：http://bit.ly/singchina\n\n◘ Our Social Medias\n  浙江卫视 Facebook：http://bit.ly/zjstvfb\n  浙江卫视 Twitter：http://bit.ly/zjstvtwi\n  奔跑吧 Facebook：http://bit.ly/rmchinafb\n  梦想的声音 Facebook：http://bit.ly/soundofmydream\n  中国新歌声 Facebook：http://bit.ly/singchinafacebook\n\n◘ 演员的诞生：http://bit.ly/2y9qpEl\n\n【FULL】王俊凯不满章子顶嘴争执火药味十足？ 欧阳娜娜郑昊致敬经典被评演技不太好 《演员的诞生》第3期 20171111 [浙江卫视官方HD]\n\n《演员的诞生》以演技为唯一视角，邀请章子怡、宋丹丹、刘烨一线影帝影后坐镇演技之神，为有演技实力的平凡人搭建了一个与顶级影帝影后面对面切磋演技的真实平台。\n\n◘ More Shows\n梦想的声音：http://bit.ly/2f7cxP9\n演员的诞生：http://bit.ly/2y9qpEl\n漂亮的房子：http://bit.ly/2frBdpZ\n你好生活家：http://bit.ly/2iSfoS9\n中国新歌声：http://bit.ly/singchina2\n奔跑吧：http://bit.ly/2oZuarH\n开心剧乐部：http://bit.ly/2stCs92</td>
+    </tr>
+    <tr>
+      <td>zxuvr9tN924</td>
+      <td>17.14.11</td>
+      <td>非诚勿扰 完整版 “小朱亚文”亮相《非诚勿扰》 孟非上演cosplay首秀 171111</td>
+      <td>江苏卫视官方频道China JiangsuTV Official Channel</td>
+      <td>24</td>
+      <td>2017-11-11T16:00:04.000Z</td>
+      <td>江苏卫视|"非诚勿扰"|"姜振宇"|"孟非"|"黄澜"|"黄菡"|"黄磊"|"相亲"|"交友"|"社会服务"|"佟大为"|"刘烨"|"刘恺威"|"张亮"|"陆毅"|"love"</td>
+      <td>150974</td>
+      <td>220</td>
+      <td>65</td>
+      <td>201</td>
+      <td>https://i.ytimg.com/vi/zxuvr9tN924/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>关注【微信公众号】最新独家内容抢先看！\n江苏卫视官方微信“JSBC-JSTV”\n非诚勿扰官方微信“jstv-fcwr”\n   酷似朱亚文的帅气男生今晚（11月11日）亮相《非诚勿扰》，干净的笑容、可爱的性格、动听的歌声大受欢迎，更有女嘉宾直接告白，“咱们牵手吧！”独特的烟嗓声线、别致的cos装扮，个性十足的男嘉宾登场引发热议。一头酷酷的“长发”搭配高冷范儿的表情，孟非上演cosplay首秀，这样的孟爷爷你一定没见过！另有一位男嘉宾看起来青春洋溢，内心却住着一个“老干部”，机缘巧合的是，正有女嘉宾对这一款情有独钟。\n \n \n\n \n《非诚勿扰》全集【官方版1080P超清全集完整】视频播放地址：\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq82JJEGmYhOgDEJig4AnkHd\n\n【欢迎订阅中国江苏卫视官方YouTube频道】\n★江苏卫视官方频道 https://www.youtube.com/user/JSTVFeichengwurao\n★江苏卫视《一站到底》官方版1080P超清全集https://www.youtube.com/playlist?list=PLtFDvh1SGFq_27Qqykdokw6nS6QWQ09sf\n★江苏卫视《芝麻开门第二季》官方版1080P超清全集 https://www.youtube.com/playlist?list=PLtFDvh1SGFq9bRhFPQtCDOJT7dBk55pxZ\n★江苏卫视《职来职往》官方版1080P超清全集\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq_2gUdgbskWjxraainIBAHf\n★江苏卫视《鲜厨当道》官方版1080P超清全集\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq9td2wFp70OWpC7ASqkdjOd\n★江苏卫视《人间真情》官方版1080P超清全集 https://www.youtube.com/playlist?list=PLtFDvh1SGFq-KIqjpZuBRYPbIfVPefc4e\n★江苏卫视《减出我人生 第二季》官方版1080P超清全集 https://www.youtube.com/playlist?list=PLtFDvh1SGFq_X2iVCRcqrYRTLQJOVBULv\n★江苏卫视《世界青年说第二季》官方版1080P超清全集 ：https://www.youtube.com/playlist?list=PLtFDvh1SGFq-a9vY9_5XFgxIvTBNbLG-h\n★江苏卫视《金曲捞》官方版1080P超清全集\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq8aq8W_uaM7WSstsJ1joTwy\n★江苏卫视《金曲捞 精彩花絮》官方版1080P超清全集\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq__YVlWj83R6IusEk7Skp-I\n★江苏卫视《金曲捞 纯享版》官方版1080P超清全集\nhttps://www.youtube.com/playlist?list=PLtFDvh1SGFq9rXGG_DkrmHZnwZXfWjLt3\n★江苏卫视《非诚勿扰》官方版1080P超清全集： https://www.youtube.com/playlist?list=PLtFDvh1SGFq-bbn-9simv1I3C5UVsppQF\n★江苏卫视《我们战斗吧》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq-QOdlXZTv8zjClsJTuzsaZ\n★江苏卫视《2017年江苏卫视跨年演唱会预告》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_GVSalS5zu7c-36oyXtjLD\n★江苏卫视《江苏卫视17聚幸福跨年演唱会 完整版》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq-VXqIu5Ex8ztaW8HFNWYya\n★江苏卫视《江苏卫视17聚幸福跨年演唱会 纯享版》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq8KNIrcuwdlrUPUb0C_UqLq\n★江苏卫视《江苏卫视2017鸡年春晚》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_EQpg8E2nzU0m4qeUN5xwa\n★江苏卫视《非诚勿扰》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_oUu2WuLa_XRmatAQQQEup\n★江苏卫视《远方的爸爸》官方版1080P超清全集 https://www.youtube.com/playlist?list=PLtFDvh1SGFq8cTM67gANQdRnbYL7xLEjA\n★江苏卫视《最强大脑》官方版1080P超清全集 https://www.youtube.com/playlist?list=PLtFDvh1SGFq8G1h2_t7Glhvoz0Pf7sloW\n★江苏卫视《2016江苏卫视跨年演唱会》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_kPioIeAIArTFcNsS0ABpY\n★江苏卫视《唱游天下》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq-U87s-xgh-6sOOiZ_Eapgt\n★江苏卫视《加油小当家》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_ZoH1BpAEVStnvh6yUejZU\n★江苏卫视《女婿上门了》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq9q9QF4xVCFuUIEgwqEupn6\n★江苏卫视《原来是你》官方版1080P超清全集：https://www.youtube.com/watch?v=4dc0Sog0Vks\n★江苏卫视《我们在一起》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq-c_dJZ3Uzcn5MJ2ezFe_lr\n★江苏卫视《2016江苏卫视猴年春晚》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq_AlbDVE9KEiQmfy-SgmKzc\n★江苏卫视《我们相爱吧第二季 爱有天意》官方版1080P超清：https://www.youtube.com/playlist?list=PLtFDvh1SGFq8zOaRnTk-1i-pI6QSrPKZg\n★江苏卫视《非凡搭档》官方版1080P超清全集：https://www.youtube.com/playlist?list=PLtFDvh1SGFq8zOaRnTk-1i-pI6QSrPKZg\n★江苏卫视《我们相爱吧》官方版1080P超清全集 https://www.youtube.com/watch?v=x2lXmos_reA&amp;index=1&amp;list=PLtFDvh1SGFq_3EDf_45Gq\n\n【欢迎加入】\n★中国江苏卫视官方Twitter https://twitter.com/JSTVCHINA\n★中国江苏卫视官方Facebook粉丝专页 https://www.facebook.com/JSTVCHINA</td>
+    </tr>
+    <tr>
+      <td>dKBThyjj0J0</td>
+      <td>17.14.11</td>
+      <td>'Helping People' Sneak Peek Ep. 805 | The Walking Dead</td>
+      <td>amc</td>
+      <td>24</td>
+      <td>2017-11-13T03:00:01.000Z</td>
+      <td>The Walking Dead|"episode 805"|"episode 5"|"The Big Scary U"|"negan"|"father gabriel"|"trapped"|"help"|"helping"|"preacher"|"church"|"god"|"zombies"|"all out war"|"war"|"walkers"|"the kingdom"|"the saviors"|"Rick"|"Rick Grimes"|"Ezekiel"|"Daryl"|"Michonne"|"Morgan"|"Carl"|"Dwight"|"Jeffrey Dean Morgan"|"Andrew Lincoln"|"Norman Reedus"|"Danai Gurira"|"Lennie James"|"robert kirkman"|"scott m. gimple"|"apocalypse"|"season"|"season 8"|"alexandria"|"AMC"|"tv"|"tv show"|"television"|"11/12_TWD"|"sneak peek"|"Featured"</td>
+      <td>70448</td>
+      <td>1538</td>
+      <td>25</td>
+      <td>315</td>
+      <td>https://i.ytimg.com/vi/dKBThyjj0J0/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Negan and Father Gabriel remain trapped together in a trailer surrounded by walkers. Don’t miss the next episode of The Walking Dead, Sunday, November 19 at 9/8c.\n\n#TheWalkingDead #TWD #AllOutWar\n\nFor more The Walking Dead videos: http://goo.gl/qJOZ6n\n\nSneak Peek of The Walking Dead: Season 8, Episode 5\n\nSubscribe to the AMC YouTube Channel : http://goo.gl/qSMzej\nThe Walking Dead: https://goo.gl/jzTTCb\nSign Up for the The Walking Dead Newsletter : http://www.amc.com/shows/the-walking-dead/exclusives/newsletter-subscription\nThe Walking Dead on Facebook: https://www.facebook.com/TheWalkingDeadAMC/ \nThe Walking Dead on Twitter: https://twitter.com/WalkingDead_AMC \nSign Up for the AMC Newsletter : http://www.amc.com/newsletter-subscription\nAMC : http://www.amc.com/\nAMC on Facebook : https://www.facebook.com/amc\nAMC on Twitter : http://twitter.com/AMC_TV</td>
+    </tr>
+    <tr>
+      <td>pQgPR2V6924</td>
+      <td>17.14.11</td>
+      <td>《文茜世界周報》美媒狂酸川普　對華貿易選前選後判若兩人2017.11.11|Sisy's World News【完整版-FULL HD】</td>
+      <td>文茜的世界周報 Sisy's World News</td>
+      <td>25</td>
+      <td>2017-11-12T07:09:51.000Z</td>
+      <td>陳文茜|"文茜世界周報"|"文茜世界財經週報"|"中天的夢想驛站"|"Courier Station of Dream"|"Sisy's World News"|"Sisy's Finance Weekly"|"文茜"|"文茜全集"|"文茜周報全集"|"文茜周報整集"|"文茜財經"|"中天新聞"</td>
+      <td>135620</td>
+      <td>379</td>
+      <td>86</td>
+      <td>449</td>
+      <td>https://i.ytimg.com/vi/pQgPR2V6924/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>《中天的夢想驛站》更多影音→https://goo.gl/BbhRZJ\n《文茜的世界週報》更多影音→https://goo.gl/oZthoh\n《文茜的財經周報》更多影音→https://goo.gl/XBqI2g\n\n播出頻道：中天新聞台CH52\n播出時間↓↓↓\n週六 22:00 文茜的世界周報\n週六 23:00 中天的夢想驛站\n週日 21:00 文茜的世界周報\n週日 22:00 文茜的世界財經周報\n\n「未經著作權人事先書面同意，勿將內容用於商業性質之分享、連結。」\n「如有任何營業使用，必須事先取得書面同意」</td>
+    </tr>
+    <tr>
+      <td>lHcXhBojpeQ</td>
+      <td>17.14.11</td>
+      <td>三屆TVB視帝，拋棄10年青梅竹馬髮妻，為娶小三還不惜與母絕交！</td>
+      <td>明星百曉生</td>
+      <td>22</td>
+      <td>2017-11-12T12:49:50.000Z</td>
+      <td>[none]</td>
+      <td>88061</td>
+      <td>47</td>
+      <td>58</td>
+      <td>17</td>
+      <td>https://i.ytimg.com/vi/lHcXhBojpeQ/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Subscribers Link: http://bit.ly/2qb69dZ\n\nConnect with Radaan Media online: http://bit.ly/2rGVWHT\n\nVisit our WEBSITE: https://www.radaan.tv\n\nLike us on FACEBOOK: http://bit.ly/2qLmgTm\n\nFollow us on TWITTER: http://bit.ly/2r8gZGD\n\nVAANI RANI SYNOPSIS\nTwin sister’s Vaani and Rani get married to an elder and younger brother of the same family respectively. Vaani the elder one is a well read attorney and the younger one Rani is a failure in education with not even going beyond 10thclass. Though both have extreme ideologies of life Rani is a favorite among neighbors with her uncanny innocent approach. Vaani is a roaring lion at the court room who is looked up as a role model to so many upcoming lawyers for her advocating abilities, whereas Rani is a well versed home maker. Not only with the sisters remain with this extremity but even their respective husband’s share the same dose of luck….Vaani is a mother of 2 children and Rani has three children who are in their teens. Volcanoes of persistent problem erupts now and then between the children too since each of them pertaining to different thought process indulge in living together under one roof as a nuclear family. Their comes a stage when it becomes so difficult to keep the family values intact between the varied problems which keeps cropping making the situation even more complex.\n\nWill Peace ever come back in this family ?\n\nWill anyone give up their Ego for the betterment of the family ?\n\nHead of Creative’s: Radikaa Sarathkumar\n\nStory: Radaan Mediaworks India Ltd,\n\nDirection: O.N. Rathnam\n\nDialogue: Pa. Raghavan\n\nScreen play: S. Kumaresan\n\nCamera: Chellapandian\n\nTitle Song: Sathya\n\nRe-recording: Hari\n\nCast: Radikaa Sarthkumar, Venu Aravind, Babulu, Arun Kumar Rajan, Vicky, Manas, Neelima, Navya, Andrews, Sasikala, Sudha, Niranjani, Gugan, Neha, Ravikumar, Vaani, Mano, Rajkumar, Mithran, Baboos, Sangeetha Balan, Murali, Srilekha, Rajendran, Nandakumar, Joker Thulasi, Tarun Kumar, Kavithalaya Krishnan, Ramachandran, Dharani, Shamly, Sruthi, Ashagu, Nithya Ravinder\n\nAn Icon in Indian Cinema, a top class actress, an incredibly successful entrepreneur and a Versatile Personality R.Radikaa Sarathkumar is indeed a Woman of Substance. She was introduced by Trendsetting Tamil Director Sri. Bharathiraja in his film “Kizhake Pogum Rayil”. Then she pursued acting in Tamil, Telugu, Malayalam, Kannada and Hindi in about 300 films. She has been crowned with Six Film fare Awards, Ten Cinema express awards, Four Tamil Nadu State Awards, Two Andhra state awards, Two Malaysian Film association awards. “Indra Priyadarshini Award” for her outstanding achievement and contribution to the society on the eve of International Women’s day. She is the founder of the Radaan Mediaworks Pvt. India Limited, which has produced serials such as Chitti, Annamalai, Selvi, Arasi, Chellame, and Vaani Rani . She created Historical records by appearing and making her Television soaps “Chithi” “Arasi” and “Annamalai” . At her 18th year of Mega Serial Era, she is winning the hearts of every Tamil Households in India with the latest “Vaani Rani” a double action treat of hers.</td>
+    </tr>
+    <tr>
+      <td>Yo84eqYwP98</td>
+      <td>17.14.11</td>
+      <td>LA PIRE PARTIE ft Le Rire Jaune, Pierre Croce, Fabien Olicard, Nad Rich' Hard, Max Bird, Studio Vrac</td>
+      <td>Le Labo</td>
+      <td>24</td>
+      <td>2017-11-12T15:00:02.000Z</td>
+      <td>[none]</td>
+      <td>432721</td>
+      <td>14053</td>
+      <td>576</td>
+      <td>1161</td>
+      <td>https://i.ytimg.com/vi/Yo84eqYwP98/default.jpg</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>Le jeu de société: https://goo.gl/hhG1Ta\n\nGagner le jeu signé par tous les joueurs: \n\nChaîne de Studio Vrac: https://goo.gl/HVPoJs\nChaîne du Rire Jaune: https://goo.gl/JqUGNj\nChaîne de Fabien Olicard: https://goo.gl/uc6zii\nChaîne de Nad Rich' Hard: https://goo.gl/hiy2mw\nChaîne de Pierre Croce: https://goo.gl/PVijXG\nChaîne de Max Bird: https://goo.gl/A9Zc1r\nChaîne des astuces de Margaux: https://goo.gl/Pz9L1v\n\n\n------------------\n\nSi tu m'envoies un colis ou une lettre, n'oublie pas d'y laisser ton adresse pour t'ajouter à la carte des abonnés !\n\nLa carte des abonnés: https://goo.gl/438YIX\n\n\nMa liste de recherches de cartes Battle Tube : https://goo.gl/zG6Npz\nMa liste de recherches de cartes Yu-Gi-Oh : https://goo.gl/40bUBO\nMa liste de recherches de jeux GameCube : https://goo.gl/cMEAM7\n\n------------------\n\nTu veux m'envoyer un colis ?\nC'est ici:\n\nDoc Seven\nUne pièce en plus\n119 Avenue Paul Vaillant Couturier\n94250 Gentilly\n\n------------------\n\nTu veux m'envoyer une lettre ?\nC'est ici:\n\nDoc Seven\n8, rue du Fg Poissonnière\n75010 Paris\n\n------------------\n\nSi vous venez de ma chaîne principale, vous me connaissez, sinon allez faire un tour sur ma chaîne principale: \nhttps://www.youtube.com/channel/UC5Twj1Axp_-9HLsZ5o_cEQQ\n\nN'oubliez pas de vous abonner et n'hésitez pas à me suivre sur les réseaux sociaux!\n\nFacebook: https://www.facebook.com/DocSevenTV\nTwitter: https://twitter.com/DocSevenTV\nInstagram: https://www.instagram.com/docseventv/\n\n------------------\n\nCrédit(s) musique:\nArtistes récurrents:\n- KronoMuzik : https://www.youtube.com/channel/UC5C9...\n\n- Anthox : https://www.youtube.com/user/wildesyde\n\n- Efisio Cross : https://www.youtube.com/user/EfisioSymphony\n\nGraphisme de la chaîne:\nBoidin: https://www.youtube.com/user/battlefrite</td>
+    </tr>
+  </tbody>
+</table>
+
+    <p class="small"><strong>Notes:</strong> Numeric missing values imputed with mean; categorical with mode. Duplicates dropped. Column names standardized to lowercase with underscores. Outliers removed via IQR rule per numeric column.</p>
+</body>
+</html>
